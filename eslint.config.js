@@ -86,6 +86,7 @@ export default [
       ],
       'no-useless-escape': 'off',
       'no-case-declarations': 'off',
+      'no-unused-vars': 'off',
     },
   },
   ...fixupConfigRules(

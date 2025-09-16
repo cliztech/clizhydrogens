@@ -25,12 +25,11 @@ export default {
        * Create a Remix request handler and pass
        * Hydrogen's Storefront client to the loader context.
        */
-      const handleRequest = createRequestHandler({
-        // eslint-disable-next-line import/no-unresolved
-        build: await import('virtual:react-router/server-build'),
-        mode: process.env.NODE_ENV,
-        getLoadContext: () => appLoadContext,
-      });
+        const handleRequest = createRequestHandler({
+          build: await import('virtual:react-router/server-build'),
+          mode: process.env.NODE_ENV,
+          getLoadContext: () => appLoadContext,
+        });
 
       const response = await handleRequest(request);
 

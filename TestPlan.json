@@ -1,0 +1,73 @@
+{
+  "name": "Cheeky Prints Core Journeys",
+  "scenarios": [
+    {
+      "id": "home-to-checkout",
+      "description": "Shopper browses home, drills into collection, product, adds to cart, proceeds to checkout redirect.",
+      "path": ["/", "/collections/bold-botanicals", "/products/cheeky-botanical-print", "/cart"],
+      "steps": [
+        {"action": "visit", "target": "https://preview.cheekyprints.shop/"},
+        {"action": "click", "selector": "[data-test=featured-collection-link]"},
+        {"assert": "visible", "selector": "[data-test=collection-heading]"},
+        {"action": "click", "selector": "[data-test=product-card]:nth-of-type(1) a"},
+        {"assert": "visible", "selector": "[data-test=pdp-title]"},
+        {"action": "select", "selector": "[name='Frame Color']", "value": "Natural"},
+        {"action": "click", "selector": "[data-test=add-to-cart]"},
+        {"assert": "text", "selector": "[data-test=toast-message]", "value": "Added to cart"},
+        {"action": "click", "selector": "[data-test=view-cart]"},
+        {"assert": "visible", "selector": "[data-test=cart-line-item]"},
+        {"action": "click", "selector": "[data-test=checkout]"},
+        {"assert": "navigated", "target": "https://checkout.shopify.com"}
+      ]
+    },
+    {
+      "id": "search-filter",
+      "description": "Search and filter flow with Algolia facets.",
+      "path": ["/search"],
+      "steps": [
+        {"action": "visit", "target": "https://preview.cheekyprints.shop/search"},
+        {"action": "fill", "selector": "[data-test=search-input]", "value": "print"},
+        {"action": "press", "key": "Enter"},
+        {"assert": "visible", "selector": "[data-test=result-count]"},
+        {"action": "click", "selector": "[data-test=filter-toggle]"},
+        {"action": "click", "selector": "[data-test=facet-color] [value='Pink']"},
+        {"action": "click", "selector": "[data-test=apply-filters]"},
+        {"assert": "text-contains", "selector": "[data-test=active-filters]", "value": "Pink"}
+      ]
+    },
+    {
+      "id": "locale-switch",
+      "description": "Switch locale/market and confirm currency update.",
+      "path": ["/", "/uk"],
+      "steps": [
+        {"action": "visit", "target": "https://preview.cheekyprints.shop/"},
+        {"action": "click", "selector": "[data-test=market-selector]"},
+        {"action": "click", "selector": "[data-test=market-option-UK]"},
+        {"assert": "url", "value": "https://preview.cheekyprints.shop/uk"},
+        {"assert": "text-contains", "selector": "[data-test=price]", "value": "£"}
+      ]
+    },
+    {
+      "id": "account-sign-in",
+      "description": "Customer logs in from account hub.",
+      "path": ["/account"],
+      "steps": [
+        {"action": "visit", "target": "https://preview.cheekyprints.shop/account"},
+        {"action": "fill", "selector": "[data-test=login-email]", "value": "qa+cheeky@prints.com"},
+        {"action": "fill", "selector": "[data-test=login-password]", "value": "TestPassword123"},
+        {"action": "click", "selector": "[data-test=login-submit]"},
+        {"assert": "visible", "selector": "[data-test=account-dashboard]"}
+      ]
+    },
+    {
+      "id": "404-page",
+      "description": "Unknown URL shows accessible 404 with recovery links.",
+      "path": ["/not-a-page"],
+      "steps": [
+        {"action": "visit", "target": "https://preview.cheekyprints.shop/not-a-page"},
+        {"assert": "visible", "selector": "[data-test=not-found-message]"},
+        {"assert": "visible", "selector": "[data-test=search-input]"}
+      ]
+    }
+  ]
+}

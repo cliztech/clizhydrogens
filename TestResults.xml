@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="CheekyPrintsE2E" tests="5" failures="0" errors="0" skipped="5" timestamp="2025-03-01T00:00:00Z">
+  <testcase classname="home-to-checkout" name="Shopper journey">
+    <skipped message="Preview environment unavailable in CI container." />
+  </testcase>
+  <testcase classname="search-filter" name="Search facets">
+    <skipped message="Preview environment unavailable in CI container." />
+  </testcase>
+  <testcase classname="locale-switch" name="Market switch">
+    <skipped message="Preview environment unavailable in CI container." />
+  </testcase>
+  <testcase classname="account-sign-in" name="Account login">
+    <skipped message="Preview environment unavailable in CI container." />
+  </testcase>
+  <testcase classname="404-page" name="404 experience">
+    <skipped message="Preview environment unavailable in CI container." />
+  </testcase>
+</testsuite>

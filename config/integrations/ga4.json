@@ -1,0 +1,27 @@
+{
+  "measurementId": "${GA4_MEASUREMENT_ID}",
+  "apiSecret": "${GA4_API_SECRET}",
+  "debug": false,
+  "events": {
+    "view_item_list": {
+      "requiredParams": ["item_list_id", "item_list_name", "items"],
+      "trigger": "collection|search"
+    },
+    "view_item": {
+      "requiredParams": ["items"],
+      "trigger": "product"
+    },
+    "add_to_cart": {
+      "requiredParams": ["items", "currency", "value"],
+      "trigger": "quick_add|pdp"
+    },
+    "begin_checkout": {
+      "requiredParams": ["items", "currency", "value", "coupon"],
+      "trigger": "cart"
+    },
+    "purchase": {
+      "requiredParams": ["transaction_id", "items", "currency", "value"],
+      "trigger": "server"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "provider": "okendo",
+  "apiKey": "${OKENDO_API_KEY}",
+  "brandAlias": "${OKENDO_BRAND_ALIAS}",
+  "widgets": {
+    "pdp": {
+      "selector": "#okendo-reviews",
+      "lazyLoad": true,
+      "deferUntil": "idle"
+    },
+    "ratingSnippet": {
+      "selector": "[data-test=product-rating]",
+      "cacheTTL": 900
+    }
+  },
+  "webhooks": {
+    "orders": "https://hooks.cheekyprints.com/okendo/order"
+  }
+}

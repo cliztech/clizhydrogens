@@ -1,0 +1,18 @@
+{
+  "provider": "algolia",
+  "appId": "${ALGOLIA_APP_ID}",
+  "searchKey": "${ALGOLIA_SEARCH_KEY}",
+  "adminKey": "${ALGOLIA_ADMIN_KEY}",
+  "indexPrefix": "${ALGOLIA_INDEX_PREFIX}",
+  "indices": {
+    "products": {
+      "replicas": ["products_price_asc", "products_price_desc"],
+      "facets": ["tags", "options.Color", "options.Size"],
+      "synonyms": [["poster", "print"], ["funny", "cheeky"]]
+    }
+  },
+  "recommend": {
+    "enabled": true,
+    "models": ["bought-together", "related-products"]
+  }
+}

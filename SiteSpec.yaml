@@ -1,0 +1,149 @@
+brand:
+  name: "Cheeky Prints"
+  mission: "Deliver joyful, customizable print-on-demand decor and gifts for bold personalities."
+  tone: "Playful, confident, and a little cheeky—balance humor with clarity."
+  values:
+    - sustainability
+    - artist-collaboration
+    - inclusive-experience
+  accessibility_notes:
+    - "Maintain 4.5:1 contrast for body text and 3:1 for large accents."
+    - "Support keyboard-only and screen-reader navigation on every page."
+markets:
+  - code: "US"
+    locale: "en-US"
+    currency: "USD"
+  - code: "UK"
+    locale: "en-GB"
+    currency: "GBP"
+  - code: "AU"
+    locale: "en-AU"
+    currency: "AUD"
+performance_budget:
+  mobile:
+    lcp_ms: 2000
+    cls: 0.1
+    inp_ms: 200
+  desktop:
+    lcp_ms: 1800
+    cls: 0.07
+    inp_ms: 180
+routes:
+  - id: home
+    path: "/"
+    template: "hero-featured"
+    purpose: "Introduce Cheeky Prints, highlight hero product drops, surface featured collection, encourage browsing."
+    primary_components:
+      - heroBanner
+      - featuredCollectionGrid
+      - recommendedProductsCarousel
+      - editorialSpotlight
+      - newsletterSignup
+  - id: collectionIndex
+    path: "/collections"
+    template: "collection-directory"
+    purpose: "Showcase available themes and entry points into PLPs."
+    primary_components:
+      - pageHeader
+      - collectionList
+      - promoBanner
+      - breadcrumb
+  - id: collectionDetail
+    path: "/collections/:handle"
+    template: "plp"
+    purpose: "Enable filtering and sorting of products within a collection."
+    primary_components:
+      - breadcrumb
+      - collectionHero
+      - filterDrawer
+      - sortMenu
+      - productGrid
+      - pagination
+      - promoBadge
+  - id: productDetail
+    path: "/products/:handle"
+    template: "pdp"
+    purpose: "Drive purchase for a single product with customization options."
+    primary_components:
+      - mediaGallery
+      - productTitlePrice
+      - productOptions
+      - addToCartForm
+      - productBadge
+      - productDescriptionTabs
+      - socialProof
+      - complementaryProducts
+  - id: cart
+    path: "/cart"
+    template: "cart"
+    purpose: "Provide order review, shipping estimate, and checkout CTA."
+    primary_components:
+      - cartLineItems
+      - priceSummary
+      - discountCode
+      - shippingEstimator
+      - checkoutButton
+      - freeShippingBadge
+  - id: search
+    path: "/search"
+    template: "search"
+    purpose: "Help shoppers find products quickly with typeahead and filters."
+    primary_components:
+      - searchHeader
+      - searchInput
+      - filterDrawer
+      - resultCount
+      - productGrid
+      - emptyState
+  - id: blogIndex
+    path: "/blogs"
+    template: "blog-index"
+    purpose: "Highlight brand storytelling and design inspiration."
+    primary_components:
+      - heroBanner
+      - articleCard
+      - categoryFilter
+      - newsletterSignup
+  - id: blogArticle
+    path: "/blogs/:blogHandle/:articleHandle"
+    template: "blog-article"
+    purpose: "Deliver long-form editorial content with shoppable embeds."
+    primary_components:
+      - breadcrumb
+      - articleHeader
+      - richTextBody
+      - inlineProductCard
+      - relatedArticles
+  - id: account
+    path: "/account"
+    template: "account-hub"
+    purpose: "Centralize order history, saved designs, and profile management."
+    primary_components:
+      - accountNav
+      - accountOverviewCards
+      - orderList
+      - loyaltyBadge
+  - id: cartDrawer
+    path: "drawer/cart"
+    template: "cart-drawer"
+    purpose: "Quick overview of cart contents within browsing context."
+    primary_components:
+      - cartLineItems
+      - priceSummary
+      - checkoutButton
+  - id: policies
+    path: "/policies/:handle"
+    template: "policy"
+    purpose: "Communicate legal and trust policies."
+    primary_components:
+      - pageHeader
+      - longFormContent
+      - breadcrumb
+  - id: 404
+    path: "/404"
+    template: "not-found"
+    purpose: "Guide lost visitors back to shopping."
+    primary_components:
+      - messageBlock
+      - searchInput
+      - featuredLinks

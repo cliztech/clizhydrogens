@@ -9,12 +9,12 @@ import {ProductItem} from '~/components/ProductItem';
 export const meta = () => {
   return [
     {
-      title: 'Cheeky Prints | Playful art prints for bold spaces',
+      title: 'Cheeky Prints | Colour-drenched art for modern walls',
     },
     {
       name: 'description',
       content:
-        'Discover limited edition art prints, vibrant gallery walls, and cheeky colour stories handcrafted for joyful homes.',
+        'A collector-worthy Hydrogen storefront celebrating playful illustration, limited edition art prints, and joyful interiors.',
     },
   ];
 };
@@ -23,18 +23,13 @@ export const meta = () => {
  * @param {LoaderFunctionArgs} args
  */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
   return {...deferredData, ...criticalData};
 }
 
 /**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  * @param {LoaderFunctionArgs}
  */
 async function loadCriticalData({context}) {
@@ -53,16 +48,12 @@ async function loadCriticalData({context}) {
 }
 
 /**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
  * @param {LoaderFunctionArgs}
  */
 function loadDeferredData({context}) {
   const newArrivals = context.storefront
     .query(NEW_ARRIVALS_QUERY)
     .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
       console.error(error);
       return null;
     });
@@ -75,41 +66,43 @@ function loadDeferredData({context}) {
 export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
-  const heroProduct = data.bestSellers?.[0] ?? null;
+
+  const bestSellers = data.bestSellers ?? [];
+  const heroProduct = bestSellers[0] ?? null;
+  const bestsellerSpotlight = bestSellers[1] ?? heroProduct ?? null;
+  const supportingBestSellers = bestSellers
+    .filter((product) => product.id !== bestsellerSpotlight?.id)
+    .slice(0, 4);
+
   return (
     <div className="home">
       <Hero collection={data.heroCollection} featuredProduct={heroProduct} />
-      <Highlights />
-      <CollectionsSpotlight collections={data.spotlightCollections} />
-      <ProductGridSection
-        title="Bestselling prints"
-        subtitle="Fan-favourite colour stories that sell out fast."
-        products={data.bestSellers}
-      />
-      <StorySection />
-      <ValuesSection />
+      <TrustBar />
+      <SignatureCollections collections={data.spotlightCollections} />
+      <BestsellerShowcase featured={bestsellerSpotlight} products={supportingBestSellers} />
+      <StudioSpotlight />
+      <ProcessSection />
       <Suspense
         fallback={
           <SectionSkeleton
-            title="Fresh off the press"
-            subtitle="New arrivals are lining up in the studio."
+            title="Fresh from the studio"
+            subtitle="The latest colour stories are being curated."
           />
         }
       >
         <Await resolve={data.newArrivals}>
           {(response) => (
-            <ProductGridSection
-              title="Fresh off the press"
-              subtitle="Limited runs that just dropped—grab your favourites before they disappear."
+            <ProductShelf
+              title="Fresh from the studio"
+              subtitle="Limited-run arrivals released every Friday at 10am."
               products={response?.products?.nodes ?? []}
-              variant="secondary"
             />
           )}
         </Await>
       </Suspense>
-      <Testimonials />
-      <Callout />
-      <InstagramSection />
+      <GallerySection />
+      <TestimonialsSection />
+      <StylingCallout />
       <NewsletterSection />
     </div>
   );
@@ -119,118 +112,116 @@ function Hero({collection, featuredProduct}) {
   const heroHandle = collection?.handle ? `/collections/${collection.handle}` : '/collections';
   const heroDescription = collection?.description?.trim()
     ? collection.description
-    : 'Bold lines, playful palettes, and tongue-in-cheek phrases crafted to spark conversations in every room.';
+    : 'Bold lines, cheeky statements, and palettes that feel like sunshine—each piece is crafted to transform everyday walls into a gallery moment.';
 
   return (
-    <section className="homepage-section hero">
-      <div className="hero-media" aria-hidden="true">
-        {collection?.image ? (
-          <Image
-            className="hero-image"
-            data={collection.image}
-            loading="eager"
-            sizes="100vw"
-          />
-        ) : (
-          <div className="hero-image hero-image--placeholder" />
-        )}
-        <div className="hero-overlay" />
-      </div>
-      <div className="page-width hero-content">
-        <p className="eyebrow">Cheeky Prints Studio</p>
-        <h1>Colorful art for playful souls</h1>
-        <p className="hero-intro">{heroDescription}</p>
-        <div className="hero-actions">
-          <Link className="button button--primary" prefetch="intent" to={heroHandle}>
-            Shop the collection
-          </Link>
-          <Link className="button button--ghost" prefetch="intent" to="/collections">
-            Browse all prints
-          </Link>
+    <section className="homepage-section hero" aria-labelledby="cheeky-prints-hero">
+      <div className="page-width hero__grid">
+        <div className="hero__copy">
+          <p className="eyebrow">Cheeky Prints Studio</p>
+          <h1 id="cheeky-prints-hero">Colour made for conversation</h1>
+          <p>{heroDescription}</p>
+          <div className="hero__actions">
+            <Link className="button button--primary" prefetch="intent" to={heroHandle}>
+              Shop the latest drop
+            </Link>
+            <Link className="button button--outline" prefetch="intent" to="/collections">
+              Explore all artwork
+            </Link>
+          </div>
+          <dl className="hero__stats">
+            {HERO_STATS.map((stat) => (
+              <div className="hero__stat" key={stat.title}>
+                <dt>{stat.title}</dt>
+                <dd>{stat.description}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-        <div className="hero-stat-grid">
-          <div className="hero-stat">
-            <span className="hero-stat-title">100% recycled</span>
-            <p>Planet-friendly paper &amp; water-based inks</p>
-          </div>
-          <div className="hero-stat">
-            <span className="hero-stat-title">Artist-made</span>
-            <p>Dreamed up in our East London studio</p>
-          </div>
-          <div className="hero-highlight">
-            <span className="hero-stat-title">Collector favourite</span>
-            {featuredProduct ? (
-              <Link
-                to={`/products/${featuredProduct.handle}`}
-                prefetch="intent"
-                className="hero-highlight-card"
-              >
-                <p>{featuredProduct.title}</p>
-                <Money data={featuredProduct.priceRange.minVariantPrice} />
-              </Link>
+        <div className="hero__feature">
+          <div className="hero__media" aria-hidden="true">
+            {collection?.image ? (
+              <Image
+                className="hero__image"
+                data={collection.image}
+                loading="eager"
+                sizes="(min-width: 60em) 45vw, 90vw"
+              />
             ) : (
-              <p>Limited editions drop every month—join the club.</p>
+              <div className="hero__image hero__image--placeholder" />
             )}
+            <div className="hero__blur" />
           </div>
+          {featuredProduct ? (
+            <Link
+              className="hero__product-card"
+              prefetch="intent"
+              to={`/products/${featuredProduct.handle}`}
+            >
+              <span className="eyebrow">Collector highlight</span>
+              <h3>{featuredProduct.title}</h3>
+              <Money data={featuredProduct.priceRange.minVariantPrice} />
+              <span className="hero__product-link">View art print →</span>
+            </Link>
+          ) : null}
         </div>
       </div>
     </section>
   );
 }
 
-function Highlights() {
+function TrustBar() {
   return (
-    <section className="homepage-section highlights">
-      <div className="page-width">
-        <div className="section-heading">
-          <h2>Why you&apos;ll love Cheeky Prints</h2>
-          <p>Design-forward artwork that makes every corner feel like the fun table.</p>
-        </div>
-        <div className="highlight-cards">
-          {HIGHLIGHT_CARDS.map((item) => (
-            <article className="highlight-card" key={item.title}>
-              <span aria-hidden className="highlight-icon">
-                {item.icon}
-              </span>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-            </article>
-          ))}
-        </div>
+    <section className="trust-bar" aria-label="Cheeky Prints highlights">
+      <div className="page-width trust-bar__inner">
+        {TRUST_BADGES.map((badge) => (
+          <div className="trust-badge" key={badge.title}>
+            <span className="trust-badge__icon" aria-hidden>
+              {badge.icon}
+            </span>
+            <div>
+              <p>{badge.title}</p>
+              <small>{badge.description}</small>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
 }
 
-function CollectionsSpotlight({collections}) {
+function SignatureCollections({collections}) {
   if (!collections?.length) return null;
+  const curatedCollections = collections.slice(0, 3);
   return (
-    <section className="homepage-section collections-spotlight">
+    <section className="homepage-section signature-section">
       <div className="page-width">
-        <div className="section-heading">
-          <h2>Curated walls, ready to hang</h2>
-          <p>Mix-and-match sets styled to brighten your studio, hallway, or favourite reading nook.</p>
+        <div className="section-heading section-heading--left">
+          <h2>Signature colour stories</h2>
+          <p>Handpicked sets styled to make an entrance in your hallway, lounge, or creative studio.</p>
         </div>
-        <div className="spotlight-grid">
-          {collections.map((collection) => {
+        <div className="signature-grid">
+          {curatedCollections.map((collection, index) => {
             const handle = collection.handle ? `/collections/${collection.handle}` : '/collections';
             return (
-              <Link className="spotlight-card" key={collection.id} prefetch="intent" to={handle}>
-                {collection.image ? (
-                  <Image
-                    className="spotlight-image"
-                    data={collection.image}
-                    loading="lazy"
-                    sizes="(min-width: 48em) 33vw, 90vw"
-                  />
-                ) : (
-                  <div className="spotlight-image spotlight-image--placeholder" aria-hidden />
-                )}
-                <div className="spotlight-content">
-                  <span className="eyebrow">Collection</span>
+              <Link className="signature-card" key={collection.id} prefetch="intent" to={handle}>
+                <div className="signature-card__media" aria-hidden>
+                  {collection.image ? (
+                    <Image
+                      className="signature-card__image"
+                      data={collection.image}
+                      loading="lazy"
+                      sizes="(min-width: 60em) 30vw, 90vw"
+                    />
+                  ) : (
+                    <div className="signature-card__image signature-card__image--placeholder" />
+                  )}
+                </div>
+                <div className="signature-card__content">
+                  <span className="signature-card__index">0{index + 1}</span>
                   <h3>{collection.title}</h3>
                   <p>{getCollectionExcerpt(collection.description)}</p>
-                  <span className="spotlight-link">Shop now →</span>
+                  <span className="signature-card__link">Shop this vibe →</span>
                 </div>
               </Link>
             );
@@ -241,58 +232,101 @@ function CollectionsSpotlight({collections}) {
   );
 }
 
-function ProductGridSection({title, subtitle, products, variant = 'primary'}) {
-  const sectionClassName = `homepage-section product-section ${
-    variant === 'secondary' ? 'product-section--secondary' : ''
-  }`;
-
+function BestsellerShowcase({featured, products}) {
+  if (!featured && (!products || products.length === 0)) return null;
+  const handle = featured?.handle ? `/products/${featured.handle}` : '/collections/best-sellers';
   return (
-    <section className={sectionClassName}>
+    <section className="homepage-section bestseller-section">
+      <div className="page-width">
+        <div className="section-heading section-heading--left">
+          <h2>Most-loved prints this week</h2>
+          <p>Editioned artwork on archival stock, signed and shipped straight from our East London studio.</p>
+        </div>
+        <div className="bestseller-grid">
+          {featured ? (
+            <Link className="bestseller-spotlight" prefetch="intent" to={handle}>
+              <div className="bestseller-spotlight__media" aria-hidden>
+                {featured.featuredImage ? (
+                  <Image
+                    className="bestseller-spotlight__image"
+                    data={featured.featuredImage}
+                    loading="lazy"
+                    sizes="(min-width: 60em) 40vw, 90vw"
+                  />
+                ) : (
+                  <div className="bestseller-spotlight__image bestseller-spotlight__image--placeholder" />
+                )}
+                <div className="bestseller-spotlight__overlay" />
+              </div>
+              <div className="bestseller-spotlight__content">
+                <span className="eyebrow">Limited release</span>
+                <h3>{featured.title}</h3>
+                <p>{BESTSELLER_BLURB}</p>
+                <div className="bestseller-spotlight__cta">
+                  <Money data={featured.priceRange.minVariantPrice} />
+                  <span>View details</span>
+                </div>
+              </div>
+            </Link>
+          ) : null}
+          <div className="bestseller-list">
+            {(products ?? []).map((product) => (
+              <ProductItem key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProductShelf({title, subtitle, products}) {
+  return (
+    <section className="homepage-section product-shelf">
       <div className="page-width">
         <div className="section-heading">
           <h2>{title}</h2>
           {subtitle ? <p>{subtitle}</p> : null}
         </div>
         {products?.length ? (
-          <div className="product-grid">
+          <div className="product-shelf__grid">
             {products.map((product) => (
               <ProductItem key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <p className="section-empty">Check back soon for more cheeky creations.</p>
+          <p className="section-empty">More goodness is on the way—check back soon.</p>
         )}
       </div>
     </section>
   );
 }
 
-function StorySection() {
+function StudioSpotlight() {
   return (
-    <section className="homepage-section story-section">
-      <div className="page-width story-grid">
-        <div className="story-card story-card--image" aria-hidden="true">
+    <section className="homepage-section studio-section">
+      <div className="page-width studio-grid">
+        <div className="studio-media" aria-hidden>
           <img
-            alt="Colorful gallery wall featuring vibrant prints."
+            alt="Artist arranging colourful prints inside the Cheeky Prints studio."
             loading="lazy"
-            src="https://images.unsplash.com/photo-1524230567005-1c1f48f64ab7?auto=format&fit=crop&w=1200&q=80"
+            src="https://images.unsplash.com/photo-1526498460520-4c246339dccb?auto=format&fit=crop&w=1200&q=80"
           />
         </div>
-        <div className="story-card story-card--content">
-          <p className="eyebrow">Meet the studio</p>
-          <h2>Cheeky by name, joyful by nature</h2>
+        <div className="studio-content">
+          <p className="eyebrow">Inside the studio</p>
+          <h2>Mischief meets meticulous craft</h2>
           <p>
-            We&apos;re a women-led illustration studio celebrating bold colour combos, unapologetic humour, and the little moments
-            that make homes feel alive. Every print is designed, printed, and packed in-house with meticulous attention to
-            detail—because your walls deserve nothing less.
+            Every Cheeky Prints edition starts as a sketchbook riff before evolving into richly textured illustration. We
+            mix custom colour palettes, print on archival cotton stock, and sign each piece by hand.
           </p>
-          <ul className="story-list">
-            <li>Limited edition drops with numbered certificates</li>
-            <li>Archival, museum-grade stock sourced from recycled fibres</li>
-            <li>Packaging that&apos;s plastic-free and ready to gift</li>
+          <ul className="studio-list">
+            <li>Edition sizes capped at 250 per artwork</li>
+            <li>Water-based inks with museum-grade vibrancy</li>
+            <li>Plastic-free packaging, ready to gift</li>
           </ul>
-          <Link className="button button--secondary" prefetch="intent" to="/collections/all">
-            Explore the studio best-sellers
+          <Link className="button button--secondary" prefetch="intent" to="/pages/about">
+            Tour the studio
           </Link>
         </div>
       </div>
@@ -300,22 +334,22 @@ function StorySection() {
   );
 }
 
-function ValuesSection() {
+function ProcessSection() {
   return (
-    <section className="homepage-section values-section">
+    <section className="homepage-section process-section">
       <div className="page-width">
         <div className="section-heading">
-          <h2>Our promises</h2>
-          <p>Because art should be kind to people and the planet.</p>
+          <h2>What makes Cheeky Prints different?</h2>
+          <p>Designed for modern collectors who care about story, sustainability, and serious colour pay-off.</p>
         </div>
-        <div className="values-grid">
-          {VALUES.map((value) => (
-            <article className="value-card" key={value.title}>
-              <span className="value-icon" aria-hidden>
-                {value.icon}
+        <div className="process-grid">
+          {PROCESS_POINTS.map((point) => (
+            <article className="process-card" key={point.title}>
+              <span className="process-card__icon" aria-hidden>
+                {point.icon}
               </span>
-              <h3>{value.title}</h3>
-              <p>{value.description}</p>
+              <h3>{point.title}</h3>
+              <p>{point.description}</p>
             </article>
           ))}
         </div>
@@ -324,15 +358,39 @@ function ValuesSection() {
   );
 }
 
-function Testimonials() {
+function GallerySection() {
   return (
-    <section className="homepage-section testimonials-section">
+    <section className="homepage-section gallery-section">
       <div className="page-width">
         <div className="section-heading">
-          <h2>Loved by collectors worldwide</h2>
-          <p>Real words from the vibrant homes of the Cheeky Prints community.</p>
+          <h2>Styled in joyful homes</h2>
+          <p>Collect interior inspiration from the Cheeky Prints community and see how they layer our art.</p>
         </div>
-        <div className="testimonials-grid">
+      </div>
+      <div className="gallery-grid" aria-hidden>
+        {GALLERY_IMAGES.map((image) => (
+          <figure className="gallery-card" key={image.src}>
+            <img alt={image.alt} loading="lazy" src={image.src} />
+          </figure>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsSection() {
+  return (
+    <section className="homepage-section testimonials-section">
+      <div className="page-width testimonials-inner">
+        <div className="testimonials-intro">
+          <p className="eyebrow">Collector reviews</p>
+          <h2>Homes that glow with personality</h2>
+          <p>
+            From Berlin lofts to Melbourne bungalows, collectors trust Cheeky Prints to deliver statement art that feels
+            personal, premium, and planet-conscious.
+          </p>
+        </div>
+        <div className="testimonials-stack">
           {TESTIMONIALS.map((testimonial) => (
             <blockquote className="testimonial-card" key={testimonial.name}>
               <p>“{testimonial.quote}”</p>
@@ -345,41 +403,21 @@ function Testimonials() {
   );
 }
 
-function Callout() {
+function StylingCallout() {
   return (
-    <section className="homepage-section callout-section">
-      <div className="page-width callout-card">
+    <section className="homepage-section styling-callout">
+      <div className="page-width styling-card">
         <div>
-          <p className="eyebrow">Custom gallery walls</p>
-          <h2>Need help curating the perfect trio?</h2>
+          <p className="eyebrow">Personalised styling</p>
+          <h2>Curate your dream gallery wall</h2>
           <p>
-            Book a 20-minute styling session with our in-house team for a personalised art edit tailored to your palette and
-            space.
+            Book a complimentary 20-minute consultation and we&apos;ll mock up colour stories tailored to your palette,
+            lighting, and vibe.
           </p>
         </div>
         <Link className="button button--light" prefetch="intent" to="/pages/contact">
-          Book a styling chat
+          Schedule a styling chat
         </Link>
-      </div>
-    </section>
-  );
-}
-
-function InstagramSection() {
-  return (
-    <section className="homepage-section instagram-section">
-      <div className="page-width">
-        <div className="section-heading">
-          <h2>Cheeky prints IRL</h2>
-          <p>Tag @cheekyprints for a chance to be featured on our wall of fame.</p>
-        </div>
-        <div className="instagram-grid">
-          {INSTAGRAM_IMAGES.map((image) => (
-            <figure className="instagram-card" key={image.alt}>
-              <img alt={image.alt} loading="lazy" src={image.src} />
-            </figure>
-          ))}
-        </div>
       </div>
     </section>
   );
@@ -389,10 +427,10 @@ function NewsletterSection() {
   return (
     <section className="homepage-section newsletter-section">
       <div className="page-width newsletter-card">
-        <div>
-          <p className="eyebrow">Stay in the loop</p>
-          <h2>Get a first look at new drops</h2>
-          <p>We send delightfully infrequent emails packed with colour inspiration, playlists, and secret previews.</p>
+        <div className="newsletter-card__intro">
+          <p className="eyebrow">Stay in the know</p>
+          <h2>Unlock studio playlists, colour recipes, and early access drops.</h2>
+          <p>We email sparingly—only when something delightfully bold is about to launch.</p>
         </div>
         <form className="newsletter-form" method="post" name="newsletter">
           <label className="visually-hidden" htmlFor="newsletter-email">
@@ -407,7 +445,7 @@ function NewsletterSection() {
             type="email"
           />
           <button className="button button--primary" type="submit">
-            Join the club
+            Join the list
           </button>
         </form>
       </div>
@@ -417,7 +455,7 @@ function NewsletterSection() {
 
 function SectionSkeleton({title, subtitle}) {
   return (
-    <section className="homepage-section product-section">
+    <section className="homepage-section product-shelf">
       <div className="page-width">
         <div className="section-heading">
           <h2>{title}</h2>
@@ -519,75 +557,93 @@ const NEW_ARRIVALS_QUERY = `#graphql
   }
 `;
 
-const HIGHLIGHT_CARDS = [
+const HERO_STATS = [
   {
-    title: 'Vibrant by design',
-    description: 'A curated mix of maximalist colour palettes and tongue-in-cheek phrases for statement-making walls.',
-    icon: '🎨',
+    title: 'Limited editions',
+    description: 'Every run capped at 250 signed prints.',
   },
   {
-    title: 'Limited runs',
-    description: 'Small-batch releases keep each artwork special—once a print sells out, it stays legendary.',
-    icon: '✨',
-  },
-  {
-    title: 'Ready to gift',
-    description: 'Premium wrapping, handwritten notes, and optional frames make gifting delightfully easy.',
-    icon: '🎁',
-  },
-];
-
-const VALUES = [
-  {
-    title: 'Sustainably sourced',
-    description: 'We print on FSC-certified, 100% recycled stock using water-based inks.',
-    icon: '🌱',
-  },
-  {
-    title: 'Artist supported',
-    description: 'Every purchase directly funds independent illustrators and collaborative projects.',
-    icon: '🤝',
+    title: 'Sustainable stock',
+    description: 'Printed on FSC-certified cotton paper.',
   },
   {
     title: 'Worldwide shipping',
-    description: 'Tracked, planet-conscious delivery from our UK studio to your door.',
-    icon: '✈️',
+    description: 'Arrives ready to hang in 3–7 days.',
+  },
+];
+
+const TRUST_BADGES = [
+  {
+    title: 'Artist-founded & women-led',
+    description: 'Independent studio crafting colour-rich statements.',
+    icon: '🌈',
+  },
+  {
+    title: 'Framing options available',
+    description: 'Choose oak, walnut, or white gallery frames.',
+    icon: '🖼️',
+  },
+  {
+    title: '5k+ happy collectors',
+    description: 'Rated 4.9/5 for quality and service.',
+    icon: '⭐',
+  },
+];
+
+const PROCESS_POINTS = [
+  {
+    title: 'Illustrated with attitude',
+    description: 'Each concept is sketched by hand before being translated into playful digital compositions.',
+    icon: '✏️',
+  },
+  {
+    title: 'Crafted consciously',
+    description: 'Water-based inks, recycled stock, and carbon-neutral delivery keep things planet-positive.',
+    icon: '🌍',
+  },
+  {
+    title: 'Styled for real homes',
+    description: 'We test every palette with real furniture and lighting so your prints arrive ready to shine.',
+    icon: '🏡',
   },
 ];
 
 const TESTIMONIALS = [
   {
-    name: 'Sophie, Manchester',
-    quote: 'The colours are even richer in person. My hallway has never looked this alive.',
+    name: 'Aisha — Melbourne',
+    quote: 'The colours are even richer in person. Our entryway finally has the personality it deserved.',
   },
   {
-    name: 'Alex, Berlin',
-    quote: 'Cheeky Prints nailed the custom trio for our living room—playful without feeling childish.',
+    name: 'Marco — Lisbon',
+    quote: 'Cheeky Prints made it so easy to curate a gallery wall that feels both artful and cheeky.',
   },
   {
-    name: 'Priya, Toronto',
-    quote: 'Beautiful quality and sustainably packaged. The personal note was such a thoughtful touch.',
+    name: 'Rowan — Brooklyn',
+    quote: 'Exceptional quality, beautifully packaged, and the customer care was next level.',
   },
 ];
 
-const INSTAGRAM_IMAGES = [
+const GALLERY_IMAGES = [
   {
-    src: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=900&q=80',
-    alt: 'Cheeky Prints styled above a workspace with colourful accessories.',
+    src: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Cheeky Prints artwork styled above a vintage credenza.',
   },
   {
-    src: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=900&q=80',
-    alt: 'A cosy reading corner featuring stacked art prints.',
+    src: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Bright living room featuring a trio of colourful art prints.',
   },
   {
-    src: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80',
-    alt: 'Gallery wall of bright, playful artwork in a modern living room.',
+    src: 'https://images.unsplash.com/photo-1515150144380-bca9f1650ed9?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Gallery wall moment with playful typography artwork.',
   },
   {
-    src: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80',
-    alt: 'Close-up of art prints being framed with colourful mats.',
+    src: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80',
+    alt: 'Studio desk with art prints, paint swatches, and styling props.',
   },
 ];
+
+const BESTSELLER_BLURB =
+  'An archival giclée print with a velvet-matte finish and cheeky colour blocking made to anchor any room.';
 
 const SKELETON_KEYS = ['skeleton-a', 'skeleton-b', 'skeleton-c', 'skeleton-d'];
 

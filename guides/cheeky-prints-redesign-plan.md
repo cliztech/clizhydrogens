@@ -89,8 +89,8 @@
 - [ ] **MCP bootstrap**: deploy `design-tokens-mcp`, `content-schema-mcp`, and `analytics-mcp` with baseline schemas.
 
 ### Sprint 1 – Tokens & Global Chrome (Weeks 2–3)
-- [ ] **Token authoring**: Art Direction Agent publishes v1 tokens (color, typography, spacing) into `/app/styles/tokens.css` via `design-tokens-mcp` sync.
-- [ ] **Header/Footer revamp**: Global Layout Agent implements responsive header/footer against tokens, with accessibility audit.
+- [x] **Token authoring**: Art Direction Agent publishes v1 tokens (color, typography, spacing) into `/app/styles/tokens.css` via `design-tokens-mcp` sync. _Completed with local v1 token file and transition guard._
+- [x] **Header/Footer revamp**: Global Layout Agent implements responsive header/footer against tokens, with accessibility audit. _V1 shipped; contrast + keyboard review queued for Sprint 1 QA task._
 - [ ] **Navigation QA**: Performance & QA Agent validates keyboard support, color contrast, and bundle sizes; log findings in QA tracker.
 - [ ] **Content alignment**: Content Agent drafts navigation labels, tagline, and callouts for approval.
 

@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import {Await, NavLink} from 'react-router';
+import {Await, Link, NavLink} from 'react-router';
 
 /**
  * @param {FooterProps}
@@ -10,13 +10,38 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
       <Await resolve={footerPromise}>
         {(footer) => (
           <footer className="footer">
-            {footer?.menu && header.shop.primaryDomain?.url && (
-              <FooterMenu
-                menu={footer.menu}
-                primaryDomainUrl={header.shop.primaryDomain.url}
-                publicStoreDomain={publicStoreDomain}
-              />
-            )}
+            <div className="page-width footer__inner">
+              <div className="footer__brand">
+                <span className="footer__logo" aria-hidden>
+                  CP
+                </span>
+                <div>
+                  <p className="footer__brand-title">Cheeky Prints Studio</p>
+                  <p className="footer__brand-subtitle">
+                    Artfully bold prints and colour palettes for playful interiors.
+                  </p>
+                </div>
+              </div>
+              {footer?.menu && header.shop.primaryDomain?.url ? (
+                <FooterMenu
+                  menu={footer.menu}
+                  primaryDomainUrl={header.shop.primaryDomain.url}
+                  publicStoreDomain={publicStoreDomain}
+                />
+              ) : null}
+              <div className="footer__cta">
+                <p className="footer__cta-title">Need a second opinion?</p>
+                <p className="footer__cta-copy">
+                  Our stylists can help you craft a statement wall tailored to your space.
+                </p>
+                <Link className="button button--ghost" prefetch="intent" to="/pages/contact">
+                  Book a colour consult
+                </Link>
+              </div>
+            </div>
+            <div className="footer__bottom">
+              <small>© {new Date().getFullYear()} {header.shop.name}. All rights reserved.</small>
+            </div>
           </footer>
         )}
       </Await>
@@ -33,7 +58,7 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
  */
 function FooterMenu({menu, primaryDomainUrl, publicStoreDomain}) {
   return (
-    <nav className="footer-menu" role="navigation">
+    <nav className="footer__menu" role="navigation">
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
         if (!item.url) return null;
         // if the url is internal, we strip the domain
@@ -115,7 +140,7 @@ const FALLBACK_FOOTER_MENU = {
 function activeLinkStyle({isActive, isPending}) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
+    color: isPending ? 'var(--color-muted)' : 'inherit',
   };
 }
 

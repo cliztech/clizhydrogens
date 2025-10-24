@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Typography */
+  --font-family-sans: 'Work Sans', 'Inter', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
+  --font-family-display: 'Fraunces', 'Times New Roman', serif;
+
+  /* Layout */
+  --layout-max-width: 1200px;
+  --layout-reading-max-width: 760px;
+  --layout-text-max-width: 560px;
+  --layout-header-height: 80px;
+  --layout-aside-width: 400px;
+  --layout-grid-item-width: 355px;
+  --layout-cart-summary-height: 250px;
+  --layout-cart-summary-height-with-discount: 300px;
+  --header-height: var(--layout-header-height);
+  --aside-width: var(--layout-aside-width);
+  --grid-item-width: var(--layout-grid-item-width);
+  --cart-aside-summary-height: var(--layout-cart-summary-height);
+  --cart-aside-summary-height-with-discount: var(
+    --layout-cart-summary-height-with-discount
+  );
+
+  /* Spacing scale */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.375rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Radii */
+  --radius-large: 38px;
+  --radius-medium: 22px;
+  --radius-small: 14px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-soft: 0 32px 70px rgba(15, 44, 36, 0.14);
+  --shadow-medium: 0 18px 48px rgba(16, 65, 52, 0.16);
+  --shadow-button-primary: 0 18px 44px rgba(21, 111, 91, 0.32);
+  --shadow-button-primary-hover: 0 22px 52px rgba(21, 111, 91, 0.42);
+  --shadow-button-secondary: 0 20px 44px rgba(226, 118, 45, 0.28);
+  --shadow-button-secondary-hover: 0 26px 56px rgba(226, 118, 45, 0.36);
+  --shadow-button-light: 0 16px 38px rgba(15, 44, 36, 0.12);
+
+  /* Palette */
+  --color-dark: #0f2c24;
+  --color-light: #fdfcf8;
+  --color-ink: #1b2a2f;
+  --color-muted: #4f5a5f;
+  --color-cream: #f2e8d8;
+  --color-background: #f9f6ef;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f7f0e0;
+  --color-primary: #156f5b;
+  --color-primary-dark: #0d4c3d;
+  --color-secondary: #f3a347;
+  --color-accent: #dbe7c5;
+  --color-border-subtle: rgba(15, 44, 36, 0.12);
+  --color-border-strong: rgba(15, 44, 36, 0.22);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
+  --gradient-secondary: linear-gradient(
+    130deg,
+    rgba(243, 163, 71, 0.92),
+    rgba(226, 118, 45, 0.96)
+  );
+
+  /* Transitions */
+  --transition-base: all 220ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-base: none;
+  }
+}

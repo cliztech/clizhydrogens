@@ -112,18 +112,18 @@ function Hero({collection, featuredProduct}) {
   const heroHandle = collection?.handle ? `/collections/${collection.handle}` : '/collections';
   const heroDescription = collection?.description?.trim()
     ? collection.description
-    : 'Bold lines, cheeky statements, and palettes that feel like sunshine—each piece is crafted to transform everyday walls into a gallery moment.';
+    : 'Meet our chromatic muse and dive into anime-inspired gradients, electric line-work, and cheeky typography designed to light up your studio wall.';
 
   return (
     <section className="homepage-section hero" aria-labelledby="cheeky-prints-hero">
       <div className="page-width hero__grid">
         <div className="hero__copy">
-          <p className="eyebrow">Cheeky Prints Studio</p>
-          <h1 id="cheeky-prints-hero">Colour made for conversation</h1>
+          <p className="eyebrow">Time to get cheeky</p>
+          <h1 id="cheeky-prints-hero">Neon dreams for bold collectors</h1>
           <p>{heroDescription}</p>
           <div className="hero__actions">
             <Link className="button button--primary" prefetch="intent" to={heroHandle}>
-              Shop the latest drop
+              Shop the neon drop
             </Link>
             <Link className="button button--outline" prefetch="intent" to="/collections">
               Explore all artwork
@@ -161,7 +161,7 @@ function Hero({collection, featuredProduct}) {
               <span className="eyebrow">Collector highlight</span>
               <h3>{featuredProduct.title}</h3>
               <Money data={featuredProduct.priceRange.minVariantPrice} />
-              <span className="hero__product-link">View art print →</span>
+              <span className="hero__product-link">View the spotlight print →</span>
             </Link>
           ) : null}
         </div>
@@ -559,33 +559,33 @@ const NEW_ARRIVALS_QUERY = `#graphql
 
 const HERO_STATS = [
   {
-    title: 'Limited editions',
-    description: 'Every run capped at 250 signed prints.',
+    title: 'Ultra-limited runs',
+    description: 'Only 150 neon editions signed by the Cheeky Prints crew.',
   },
   {
-    title: 'Sustainable stock',
-    description: 'Printed on FSC-certified cotton paper.',
+    title: 'Collector-grade finish',
+    description: 'Holographic spot varnish on heavyweight, FSC-certified stock.',
   },
   {
-    title: 'Worldwide shipping',
-    description: 'Arrives ready to hang in 3–7 days.',
+    title: 'Worldwide glow-up',
+    description: 'Tracked shipping lands your print in 3–7 business days.',
   },
 ];
 
 const TRUST_BADGES = [
   {
-    title: 'Artist-founded & women-led',
-    description: 'Independent studio crafting colour-rich statements.',
-    icon: '🌈',
+    title: 'Mascot powered energy',
+    description: 'Cheeky-chan leads every drop with anime-grade vibes.',
+    icon: '⚡',
   },
   {
-    title: 'Framing options available',
-    description: 'Choose oak, walnut, or white gallery frames.',
+    title: 'Frame & glow bundles',
+    description: 'UV-safe frames and LED edge lighting kits available.',
     icon: '🖼️',
   },
   {
-    title: '5k+ happy collectors',
-    description: 'Rated 4.9/5 for quality and service.',
+    title: '5k+ hype collectors',
+    description: 'Rated 4.9/5 for colour pop and playful service.',
     icon: '⭐',
   },
 ];

@@ -33,8 +33,22 @@ export function Aside({children, heading, type}) {
         {signal: abortController.signal},
       );
     }
+
     return () => abortController.abort();
   }, [close, expanded]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (expanded) {
+      root.classList.add('overlay-expanded');
+    } else {
+      root.classList.remove('overlay-expanded');
+    }
+
+    return () => {
+      root.classList.remove('overlay-expanded');
+    };
+  }, [expanded]);
 
   return (
     <div

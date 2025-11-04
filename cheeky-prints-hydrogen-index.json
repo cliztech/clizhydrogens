@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "project_name": "cheeky-prints-hydrogen",
+    "generated_at_epoch": 1762208432,
+    "file_count": 13
+  },
+  "files": [
+    {
+      "path": "package.json",
+      "size_bytes": 905,
+      "sha1": "085d6c6a58941096a76efe090270ebb8030e5142",
+      "sample_excerpt": "{\n  \"name\": \"cheeky-prints-hydrogen\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"remix dev\",\n    \"build\": \"remix build\",\n    \"start\": \"remix-serve build\"\n  },\n  \"dependencies\": {\n    \"@remix-run/node\": \"^2.11.1\",\n    \"@remix-run/react\": \"^2.11.1\",\n    \"@remix-run/serve\": \"^2.11.1\",\n    \"@shopify/hydrogen\": \"^2024.10.2\",\n    \"@shopify/hydrogen-react\": \"^2024.10.2\",\n    \"react\": \"^18.3.1\",\n    \"react-dom\": \"^18.3.1\",\n    \"three\": \"^0.160.0\",\n    \"@react-three/fiber\": \"^9.0.0"
+    },
+    {
+      "path": "remix.config.js",
+      "size_bytes": 79,
+      "sha1": "58c197675edc8b7d057a0a7b892b070fb4fdbf22",
+      "sample_excerpt": "export default { future:{ v3_routeConvention:true }, serverModuleFormat:'esm' }"
+    },
+    {
+      "path": "postcss.config.js",
+      "size_bytes": 65,
+      "sha1": "50be4ba98b9ada37c8a338e8abae4454d7a6683f",
+      "sample_excerpt": "export default { plugins: { tailwindcss: {}, autoprefixer: {} } }"
+    },
+    {
+      "path": "tailwind.config.js",
+      "size_bytes": 282,
+      "sha1": "38153bd6f39c78a7d579ed634565c2d7ffcc51ba",
+      "sample_excerpt": "/** @type {import('tailwindcss').Config} */\nexport default {content:['./app/**/*.{ts,tsx,js,jsx}'],theme:{extend:{colors:{ink:'#0C0F29',neonMagenta:'#FF2CC3',electricBlue:'#3BF7FF',hotOrange:'#FFAD00',grape:'#6E00FF'},boxShadow:{glow:'0 0 30px rgba(59,247,255,0.45)'}}}},plugins:[]}"
+    },
+    {
+      "path": ".env.example",
+      "size_bytes": 122,
+      "sha1": "b423e12ae5426dd93988ba27d4e11dd6d16cec64",
+      "sample_excerpt": "PUBLIC_STORE_DOMAIN=your-store.myshopify.com\nPUBLIC_STOREFRONT_API_TOKEN=your_token\nPUBLIC_STOREFRONT_API_VERSION=2024-10\n"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 185,
+      "sha1": "df1cffe13072ed7704d83c20a129d9feeefa49ab",
+      "sample_excerpt": "# Cheeky Prints \u2013 Hydrogen Starter\n\nQuick start:\n1) npm i\n2) cp .env.example .env and set Shopify values\n3) Place your mascot at public/assets/mascots/cheeky-hero.webp\n4) npm run dev\n"
+    },
+    {
+      "path": "app/root.tsx",
+      "size_bytes": 606,
+      "sha1": "12c3102325371c5cabae5ebafb2a21c3b282fe2d",
+      "sample_excerpt": "import type { LinksFunction } from '@remix-run/react'\nimport { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'\nimport stylesheet from './styles/tailwind.css?url'\nexport const links: LinksFunction = () => [{ rel: 'stylesheet', href: stylesheet }]\nexport default function App(){return(<html lang='en' className='h-full'><head><meta charSet='utf-8'/><meta name='viewport' content='width=device-width, initial-scale=1'/><Meta/><Links/></head><body className='bg-ink "
+    },
+    {
+      "path": "app/routes/_index.tsx",
+      "size_bytes": 2362,
+      "sha1": "650440851140e33072a9b0670ce5ca85a1205cdb",
+      "sample_excerpt": "import { Link } from '@remix-run/react'\nimport { useEffect } from 'react'\nimport Lenis from '@studio-freight/lenis'\nimport gsap from 'gsap'\nimport ScrollTrigger from 'gsap/ScrollTrigger'\nimport ClientOnly from '~/components/ClientOnly'\nimport HeroCanvas from '~/components/HeroCanvas'\ngsap.registerPlugin(ScrollTrigger)\nexport default function Index(){useEffect(()=>{const lenis=new Lenis({lerp:0.08,smoothWheel:true});const raf=(t:number)=>{lenis.raf(t);requestAnimationFrame(raf)};requestAnimationF"
+    },
+    {
+      "path": "app/routes/collections.$handle.tsx",
+      "size_bytes": 1123,
+      "sha1": "48e13f017827585de5c904e5d6369156e55ad2e8",
+      "sample_excerpt": "import type { LoaderFunctionArgs } from '@remix-run/node'\nimport { useLoaderData, Link } from '@react-router-dom'\nexport async function loader({ params }: LoaderFunctionArgs){const { handle }=params;return { handle, products: Array.from({length:8}).map((_,i)=>({id:i,title:`Sample ${i+1}`,price:(i+1)*10})) }}\nexport default function CollectionHandle(){const { handle, products } = useLoaderData<any>();const title=String(handle).toUpperCase();return(<main className='mx-auto max-w-6xl px-6 py-28'><h"
+    },
+    {
+      "path": "app/components/ClientOnly.tsx",
+      "size_bytes": 208,
+      "sha1": "f6cb27bd5a63e686a2e4d90d064bb1a24e19f2ab",
+      "sample_excerpt": "import { useEffect, useState } from 'react'\nexport default function ClientOnly({children}:{children:React.ReactNode}){const [m,setM]=useState(false);useEffect(()=>setM(true),[]);return m?<>{children}</>:null}"
+    },
+    {
+      "path": "app/components/HeroCanvas.tsx",
+      "size_bytes": 2712,
+      "sha1": "09debfd44dff84187a454f657521c92dd0140a78",
+      "sample_excerpt": "import * as THREE from 'three'\nimport { Canvas, useFrame } from '@react-three/fiber'\nimport { Float, Text, useTexture } from '@react-three/drei'\nimport { useRef } from 'react'\nfunction ParallaxMascot(){const ref=useRef<THREE.Mesh>(null!);const tex=useTexture('/assets/mascots/cheeky-hero.webp');tex.encoding=THREE.sRGBEncoding;useFrame(({clock,camera,mouse})=>{const t=clock.getElapsedTime();if(ref.current){ref.current.position.z=-0.2+Math.sin(t*0.6)*0.05;ref.current.rotation.z=Math.sin(t*0.5)*0.03"
+    },
+    {
+      "path": "app/styles/tailwind.css",
+      "size_bytes": 564,
+      "sha1": "6b300ccdc20f8cd9399a5ac16e80c2171940bb4f",
+      "sample_excerpt": "@tailwind base;@tailwind components;@tailwind utilities;:root{--bg-grad:radial-gradient(1000px 600px at 10% 0%,rgba(255,44,195,0.25),transparent 60%),radial-gradient(900px 500px at 90% 20%,rgba(59,247,255,0.25),transparent 60%),radial-gradient(800px 400px at 50% 100%,rgba(255,173,0,0.18),transparent 60%);}html,body,#__remix{height:100%}body{background-color:#0C0F29;background-image:var(--bg-grad);background-attachment:fixed}.motion-safe .anim-gradient{animation:hue 18s linear infinite}@keyframes"
+    },
+    {
+      "path": "public/assets/mascots/README.txt",
+      "size_bytes": 49,
+      "sha1": "cf0a1d8a0fd16bfb6f26ad94ca41a2c1cfc44a30",
+      "sample_excerpt": "Add your mascot image as 'cheeky-hero.webp' here."
+    }
+  ]
+}

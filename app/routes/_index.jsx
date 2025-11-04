@@ -1,10 +1,7 @@
 import {Await, Link, useLoaderData} from 'react-router';
-import {Suspense, useEffect, useMemo, useRef, useState} from 'react';
+import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import {ProductItem} from '~/components/ProductItem';
-import {ClientOnly} from '~/components/ClientOnly';
-import {HeroCanvas} from '~/components/HeroCanvas';
-import {usePrefersReducedMotion} from '~/lib/usePrefersReducedMotion';
 
 /**
  * @type {MetaFunction}
@@ -112,172 +109,22 @@ export default function Homepage() {
 }
 
 function Hero({collection, featuredProduct}) {
-  const heroRef = useRef(null);
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const [heroTextureUrl, setHeroTextureUrl] = useState(null);
   const heroHandle = collection?.handle ? `/collections/${collection.handle}` : '/collections';
   const heroDescription = collection?.description?.trim()
     ? collection.description
     : 'Bold lines, cheeky statements, and palettes that feel like sunshine—each piece is crafted to transform everyday walls into a gallery moment.';
-
-  const heroTextureSource = useMemo(() => {
-    if (featuredProduct?.featuredImage?.url) {
-      return featuredProduct.featuredImage.url;
-    }
-
-    if (collection?.image?.url) {
-      return collection.image.url;
-    }
-
-    return null;
-  }, [collection?.image?.url, featuredProduct?.featuredImage?.url]);
-
-  useEffect(() => {
-    if (!heroTextureSource || typeof window === 'undefined') {
-      setHeroTextureUrl(null);
-      return undefined;
-    }
-
-    let active = true;
-    setHeroTextureUrl(null);
-    const preloadImage = new Image();
-    preloadImage.decoding = 'async';
-    preloadImage.src = heroTextureSource;
-
-    const handleLoad = () => {
-      if (active) {
-        setHeroTextureUrl(heroTextureSource);
-      }
-    };
-
-    const handleError = () => {
-      if (active) {
-        setHeroTextureUrl(null);
-      }
-    };
-
-    preloadImage.addEventListener('load', handleLoad);
-    preloadImage.addEventListener('error', handleError);
-
-    return () => {
-      active = false;
-      preloadImage.removeEventListener('load', handleLoad);
-      preloadImage.removeEventListener('error', handleError);
-    };
-  }, [heroTextureSource]);
-
-  useEffect(() => {
-    if (!heroRef.current) return undefined;
-    heroRef.current.dataset.motion = prefersReducedMotion ? 'off' : 'on';
-    return undefined;
-  }, [prefersReducedMotion]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || prefersReducedMotion) return undefined;
-    let animationFrameId;
-    let cleanupContext;
-    let lenisInstance;
-
-    let cancelled = false;
-
-    const loadMotion = async () => {
-      if (!heroRef.current) return;
-
-      try {
-        const [lenisModule, gsapModule, scrollTriggerModule] = await Promise.all([
-          import('@studio-freight/lenis'),
-          import('gsap'),
-          import('gsap/ScrollTrigger'),
-        ]);
-
-        if (cancelled || !heroRef.current) {
-          return;
-        }
-
-        const Lenis = lenisModule?.default ?? lenisModule;
-        const gsap = gsapModule?.default ?? gsapModule;
-        const ScrollTrigger = scrollTriggerModule?.default ?? scrollTriggerModule;
-
-        if (!gsap || !ScrollTrigger) {
-          return;
-        }
-
-        gsap.registerPlugin(ScrollTrigger);
-
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        if (!reduceMotion && Lenis) {
-          lenisInstance = new Lenis({
-            lerp: 0.08,
-            smoothWheel: true,
-          });
-
-          const update = (time) => {
-            lenisInstance.raf(time);
-            ScrollTrigger.update();
-            animationFrameId = requestAnimationFrame(update);
-          };
-
-          animationFrameId = requestAnimationFrame(update);
-          lenisInstance.on?.('scroll', ScrollTrigger.update);
-        }
-
-        cleanupContext = gsap.context(() => {
-          gsap
-            .timeline({
-              scrollTrigger: {
-                trigger: '.immersive-feature-cards',
-                start: 'top bottom',
-                end: 'top top',
-                scrub: true,
-              },
-            })
-            .to('.immersive-hero__gradient', {y: -160, ease: 'none'});
-        }, heroRef);
-
-        ScrollTrigger.refresh();
-      } catch (error) {
-        console.error('Immersive hero motion failed', error);
-      }
-    };
-
-    loadMotion();
-
-    return () => {
-      cancelled = true;
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      cleanupContext?.revert?.();
-      lenisInstance?.destroy?.();
-    };
-  }, [prefersReducedMotion]);
-
-  const featuredPrice = featuredProduct?.priceRange?.minVariantPrice;
+  const heroImage = featuredProduct?.featuredImage ?? collection?.image ?? null;
+  const featuredPrice = featuredProduct?.priceRange?.minVariantPrice ?? null;
+  const productHandle = featuredProduct?.handle ? `/products/${featuredProduct.handle}` : heroHandle;
 
   return (
-    <section
-      aria-labelledby="cheeky-prints-hero"
-      className="immersive-hero"
-      id="hero"
-      ref={heroRef}
-    >
-      <div aria-hidden className="immersive-hero__background">
-        <div
-          className="immersive-hero__gradient anim-gradient"
-          data-motion-enabled={!prefersReducedMotion}
-        />
-        {!prefersReducedMotion ? (
-          <ClientOnly>
-            <HeroCanvas textureUrl={heroTextureUrl} />
-          </ClientOnly>
-        ) : null}
-      </div>
-      <div className="immersive-hero__inner page-width">
-        <div className="immersive-hero__copy">
+    <section aria-labelledby="homepage-hero-heading" className="hero" id="hero">
+      <div aria-hidden className="hero__background" />
+      <div className="hero__inner page-width">
+        <div className="hero__copy">
           <p className="eyebrow">Cheeky Prints Studio</p>
-          <h1 id="cheeky-prints-hero">Colour made for conversation</h1>
-          <p>{heroDescription}</p>
+          <h1 id="homepage-hero-heading">Colour made for conversation</h1>
+          <p className="hero__description">{heroDescription}</p>
           <div className="hero__actions">
             <Link className="button button--primary" prefetch="intent" to={heroHandle}>
               Shop the latest drop
@@ -286,47 +133,65 @@ function Hero({collection, featuredProduct}) {
               Explore all artwork
             </Link>
           </div>
-          <dl className="immersive-hero__stats">
+          <dl className="hero__stats">
             {HERO_STATS.map((stat) => (
-              <div className="immersive-hero__stat" key={stat.title}>
+              <div className="hero__stat" key={stat.title}>
                 <dt>{stat.title}</dt>
                 <dd>{stat.description}</dd>
               </div>
             ))}
           </dl>
         </div>
-        {featuredProduct ? (
-          <Link
-            className="immersive-hero__product-card"
-            prefetch="intent"
-            to={`/products/${featuredProduct.handle}`}
-          >
-            <span className="eyebrow">Collector highlight</span>
-            <h3>{featuredProduct.title}</h3>
-            {featuredPrice ? <Money data={featuredPrice} /> : null}
-            <span className="immersive-hero__product-link">View art print →</span>
-          </Link>
-        ) : (
-          <div className="immersive-hero__product-card immersive-hero__product-card--placeholder">
-            <span className="eyebrow">Collector highlight</span>
-            <h3>Hand-picked weekly</h3>
-            <p>New editions drop every Friday at 10am with only 250 prints per run.</p>
+        <div className="hero__media">
+          <div className="hero__image-frame">
+            {heroImage ? (
+              <Image
+                alt={
+                  heroImage.altText ??
+                  featuredProduct?.title ??
+                  collection?.title ??
+                  'Featured artwork from Cheeky Prints'
+                }
+                className="hero__image"
+                data={heroImage}
+                loading="eager"
+                sizes="(min-width: 62em) 38vw, 90vw"
+              />
+            ) : (
+              <div aria-hidden className="hero__image hero__image--placeholder" />
+            )}
           </div>
-        )}
-      </div>
-      <div className="immersive-feature-cards" id="immersive-feature-cards">
-        <div className="page-width">
-          <div className="immersive-feature-cards__inner">
-            <p className="eyebrow">Immersive launch module</p>
-            <h2>Motion-responsive hero tailored for campaign drops</h2>
-            <div className="immersive-feature-cards__grid">
-              {IMMERSIVE_FEATURES.map((feature) => (
-                <article className="immersive-feature-card" key={feature.title}>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
-                </article>
-              ))}
+          {featuredProduct ? (
+            <Link className="hero__product" prefetch="intent" to={productHandle}>
+              <span className="eyebrow">Collector highlight</span>
+              <h3>{featuredProduct.title}</h3>
+              {featuredPrice ? (
+                <div className="hero__product-meta">
+                  <Money data={featuredPrice} />
+                  <span className="hero__product-link">View art print →</span>
+                </div>
+              ) : (
+                <span className="hero__product-link">View art print →</span>
+              )}
+            </Link>
+          ) : (
+            <div className="hero__product hero__product--placeholder">
+              <span className="eyebrow">Collector highlight</span>
+              <h3>Hand-picked weekly</h3>
+              <p>New editions drop every Friday at 10am with only 250 prints per run.</p>
             </div>
+          )}
+        </div>
+      </div>
+      <div className="hero__foot">
+        <div className="page-width">
+          <div className="hero__foot-grid">
+            {HERO_FEATURES.map((feature) => (
+              <article className="hero__feature" key={feature.title}>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </article>
+            ))}
           </div>
         </div>
       </div>
@@ -736,22 +601,18 @@ const HERO_STATS = [
   },
 ];
 
-const IMMERSIVE_FEATURES = [
+const HERO_FEATURES = [
   {
-    title: 'Parallax-ready hero art',
-    description: 'Render Shopify collection imagery on a WebGL canvas with graceful fallbacks for slower devices.',
+    title: 'Archival giclée quality',
+    description: 'Printed on 320gsm cotton rag with water-based inks so the palette stays luminous for decades.',
   },
   {
-    title: 'Scroll-triggered ambience',
-    description: 'GSAP timelines drive gradient motion that syncs with scroll while respecting reduced-motion settings.',
+    title: 'Design-led styling support',
+    description: 'Complimentary layout sketches help you pair pieces for gallery walls and statement corners.',
   },
   {
-    title: 'Campaign spotlight card',
-    description: 'Surface the drop-of-the-week with pricing, CTAs, and space for microcopy your trade team can edit.',
-  },
-  {
-    title: 'Client-only execution',
-    description: 'ClientOnly guard prevents server mismatches and keeps Hydrogen streaming responses stable.',
+    title: 'Responsible production',
+    description: 'Small-batch runs, recycled packaging, and carbon-neutral delivery keep collecting planet-friendly.',
   },
 ];
 

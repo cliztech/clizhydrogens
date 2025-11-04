@@ -88,208 +88,244 @@ img {
   padding-bottom: 6rem;
 }
 
-.immersive-hero {
+.hero {
   background: var(--color-midnight);
   color: var(--color-ink-contrast);
   overflow: hidden;
   position: relative;
 }
 
-.immersive-hero__background {
-  inset: 0;
-  pointer-events: none;
-  position: absolute;
-}
-
-.immersive-hero__gradient {
+.hero__background {
+  animation: heroGlow 18s ease-in-out infinite alternate;
   background:
-    radial-gradient(circle at 12% 18%, rgba(255, 44, 195, 0.42), transparent 60%),
-    radial-gradient(circle at 80% 22%, rgba(59, 247, 255, 0.32), transparent 62%),
-    radial-gradient(circle at 52% 86%, rgba(255, 173, 0, 0.3), transparent 70%);
-  filter: blur(0px);
-  inset: -25% -10% -30% -10%;
-  opacity: 0.85;
+    radial-gradient(circle at 18% 14%, rgba(255, 173, 0, 0.38), transparent 60%),
+    radial-gradient(circle at 82% 26%, rgba(59, 247, 255, 0.32), transparent 62%),
+    radial-gradient(circle at 48% 82%, rgba(255, 44, 195, 0.3), transparent 70%);
+  inset: -20% -12% -28% -12%;
+  opacity: 0.88;
+  pointer-events: none;
   position: absolute;
   transform: translateZ(0);
 }
 
-.immersive-hero__three {
-  inset: -6% -12% -12% -12%;
-  position: absolute !important;
-  pointer-events: none;
+@media (prefers-reduced-motion: reduce) {
+  .hero__background {
+    animation: none;
+  }
 }
 
-.immersive-hero__three canvas {
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.immersive-hero__inner {
+.hero__inner {
   align-items: center;
   display: grid;
-  gap: clamp(2.5rem, 6vw, 4rem);
-  min-height: clamp(28rem, 75vh, 38rem);
-  padding: clamp(6rem, 14vw, 8.5rem) 0 clamp(4rem, 10vw, 6.5rem);
+  gap: clamp(2.4rem, 6vw, 4rem);
+  min-height: clamp(28rem, 72vh, 38rem);
+  padding: clamp(5rem, 12vw, 7.5rem) 0 clamp(4rem, 10vw, 6rem);
   position: relative;
   z-index: 1;
 }
 
 @media (min-width: 62em) {
-  .immersive-hero__inner {
+  .hero__inner {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
   }
 }
 
-.immersive-hero__copy {
+@media (max-width: 52em) {
+  .hero__inner {
+    text-align: left;
+  }
+
+  .hero__media {
+    order: -1;
+  }
+}
+
+.hero__copy {
   display: grid;
   gap: 1.8rem;
   max-width: 560px;
 }
 
-.immersive-hero__copy h1 {
+.hero__copy h1 {
   font-size: clamp(3rem, 6vw, 4.4rem);
   line-height: 1.02;
   margin: 0;
 }
 
-.immersive-hero__copy p {
+.hero__description {
   color: rgba(246, 249, 255, 0.78);
   font-size: 1.08rem;
   margin: 0;
 }
 
-.immersive-hero .eyebrow {
+.hero .eyebrow {
   color: var(--color-electric-blue);
 }
 
-.immersive-hero__stats {
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.hero__stats {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  margin: 2rem 0 0;
+  margin: 2.4rem 0 0;
   padding: 0;
 }
 
-.immersive-hero__stat {
-  backdrop-filter: blur(12px);
-  background: rgba(8, 12, 40, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+.hero__stat {
+  backdrop-filter: blur(14px);
+  background: rgba(8, 12, 40, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-medium);
-  box-shadow: 0 28px 90px rgba(7, 11, 36, 0.55);
+  box-shadow: 0 26px 90px rgba(7, 11, 36, 0.5);
   padding: 1.45rem;
 }
 
-.immersive-hero__stat dt {
+.hero__stat dt {
   color: rgba(246, 249, 255, 0.7);
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.16em;
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.45rem;
   text-transform: uppercase;
 }
 
-.immersive-hero__stat dd {
+.hero__stat dd {
   color: var(--color-ink-contrast);
   font-size: 1.02rem;
   margin: 0;
 }
 
-.immersive-hero__product-card {
-  align-self: stretch;
-  backdrop-filter: blur(18px);
-  background: linear-gradient(140deg, rgba(255, 44, 195, 0.22), rgba(59, 247, 255, 0.18));
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: var(--radius-medium);
-  box-shadow: 0 32px 120px rgba(8, 12, 40, 0.55);
-  color: var(--color-ink-contrast);
+.hero__media {
   display: grid;
-  gap: 1rem;
-  padding: clamp(1.8rem, 3vw, 2.4rem);
-  position: relative;
-  text-decoration: none;
-  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  gap: 1.5rem;
+  justify-items: start;
 }
 
-.immersive-hero__product-card:hover {
+.hero__image-frame {
+  aspect-ratio: 4 / 5;
+  background: rgba(8, 12, 40, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-large);
+  box-shadow: 0 36px 120px rgba(5, 9, 32, 0.55);
+  overflow: hidden;
+  width: min(100%, 520px);
+}
+
+.hero__image {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.hero__image--placeholder {
+  background: linear-gradient(140deg, rgba(59, 247, 255, 0.32), rgba(255, 44, 195, 0.32));
+  min-height: clamp(18rem, 45vw, 24rem);
+}
+
+.hero__product {
+  align-self: stretch;
+  background: rgba(8, 12, 40, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-medium);
+  box-shadow: 0 28px 90px rgba(7, 11, 36, 0.5);
+  color: var(--color-ink-contrast);
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.8rem, 3vw, 2.4rem);
+  text-decoration: none;
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+  width: min(100%, 420px);
+}
+
+.hero__product:hover {
   border-color: rgba(255, 173, 0, 0.55);
-  box-shadow: 0 42px 130px rgba(8, 12, 40, 0.65);
+  box-shadow: 0 38px 120px rgba(8, 12, 40, 0.6);
   transform: translateY(-6px);
 }
 
-.immersive-hero__product-card--placeholder {
-  background: rgba(8, 12, 40, 0.55);
-  border: 1px dashed rgba(255, 255, 255, 0.2);
+.hero__product--placeholder {
+  border: 1px dashed rgba(255, 255, 255, 0.22);
   box-shadow: none;
+  cursor: default;
 }
 
-.immersive-hero__product-card h3 {
+.hero__product h3 {
   font-size: 1.9rem;
   margin: 0;
 }
 
-.immersive-hero__product-card p {
+.hero__product p {
   color: rgba(246, 249, 255, 0.76);
   margin: 0;
 }
 
-.immersive-hero__product-link {
+.hero__product-meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.hero__product-link {
   color: var(--color-electric-blue);
   font-size: 0.96rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
-.immersive-feature-cards {
-  margin-top: clamp(3rem, 8vw, 5rem);
-  padding-bottom: clamp(2rem, 6vw, 3.5rem);
+.hero__foot {
+  padding: 0 0 clamp(4rem, 10vw, 6rem);
   position: relative;
   z-index: 1;
 }
 
-.immersive-feature-cards__inner {
-  backdrop-filter: blur(20px);
-  background: rgba(8, 12, 40, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-large);
-  box-shadow: 0 40px 140px rgba(5, 9, 32, 0.62);
-  padding: clamp(2.5rem, 6vw, 4rem);
-}
-
-.immersive-feature-cards__inner h2 {
-  color: var(--color-ink-contrast);
-  margin: 0 0 1.5rem;
-  max-width: 520px;
-}
-
-.immersive-feature-cards__grid {
+.hero__foot-grid {
   display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  margin-top: clamp(3rem, 8vw, 4.2rem);
 }
 
-.immersive-feature-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.hero__feature {
+  background: rgba(8, 12, 40, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-medium);
-  padding: 1.5rem;
-  transition: transform 200ms ease, border-color 200ms ease, background 200ms ease;
+  padding: 1.6rem;
+  transition: border-color 200ms ease, transform 200ms ease;
 }
 
-.immersive-feature-card:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 173, 0, 0.6);
+.hero__feature:hover {
+  border-color: rgba(255, 173, 0, 0.55);
   transform: translateY(-4px);
 }
 
-.immersive-feature-card h3 {
+.hero__feature h3 {
   color: var(--color-ink-contrast);
-  font-size: 1.1rem;
-  margin: 0 0 0.6rem;
+  font-size: 1.12rem;
+  margin: 0 0 0.5rem;
 }
 
-.immersive-feature-card p {
-  color: rgba(246, 249, 255, 0.75);
+.hero__feature p {
+  color: rgba(246, 249, 255, 0.78);
   margin: 0;
+}
+
+@keyframes heroGlow {
+  from {
+    opacity: 0.8;
+    transform: translate3d(-2%, -2%, 0) scale(1.02);
+  }
+
+  to {
+    opacity: 0.95;
+    transform: translate3d(2%, 3%, 0) scale(1.05);
+  }
 }
 
 .button {

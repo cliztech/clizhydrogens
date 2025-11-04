@@ -1,11 +1,13 @@
 import {Link, useFetcher} from 'react-router';
 import {Image, Money} from '@shopify/hydrogen';
-import React, {useRef, useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import {
   getEmptyPredictiveSearchResult,
   urlWithTrackingParams,
 } from '~/lib/search';
 import {useAside} from './Aside';
+
+/** @typedef {import('react')} React */
 
 /**
  * Component that renders predictive search results

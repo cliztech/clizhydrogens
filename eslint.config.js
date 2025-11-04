@@ -133,6 +133,20 @@ export default [
       'react/react-in-jsx-scope': 'off',
     },
   },
+  {
+    files: ['**/*.{js,jsx,mjs,cjs}'],
+    plugins: {
+      import: fixupPluginRules(_import),
+    },
+    settings: {
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx', '.mjs', '.cjs'],
+        },
+        typescript: {},
+      },
+    },
+  },
   ...fixupConfigRules(
     compat.extends(
       'plugin:@typescript-eslint/recommended',

@@ -1,0 +1,23 @@
+{
+  "shopId": "${PRINTIFY_SHOP_ID}",
+  "baseUrl": "https://api.printify.com/v1",
+  "pollIntervalMinutes": 30,
+  "webhooks": {
+    "order_sent_to_production": "https://hooks.cheekyprints.com/printify/order"
+  },
+  "productSync": {
+    "metafieldNamespace": "custom",
+    "metafieldKey": "printifyMockups",
+    "defaultHandlingTimeHours": 72,
+    "optionMapping": {
+      "Size": "size",
+      "Color": "color",
+      "Material": "material"
+    }
+  },
+  "rateLimit": {
+    "requestsPerMinute": 60,
+    "retryStrategy": "exponential",
+    "maxRetryMinutes": 10
+  }
+}

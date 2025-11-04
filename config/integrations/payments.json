@@ -1,0 +1,24 @@
+{
+  "provider": "shopify_payments",
+  "markets": {
+    "US": {
+      "currency": "USD",
+      "badges": ["Shop Pay", "Apple Pay", "Google Pay"],
+      "deferredPaymentThreshold": 75
+    },
+    "UK": {
+      "currency": "GBP",
+      "badges": ["Shop Pay", "Apple Pay", "Clearpay"],
+      "deferredPaymentThreshold": 65
+    },
+    "AU": {
+      "currency": "AUD",
+      "badges": ["Shop Pay", "Apple Pay", "Afterpay"],
+      "deferredPaymentThreshold": 99
+    }
+  },
+  "policy": {
+    "refundDays": 30,
+    "contactEmail": "support@cheekyprints.com"
+  }
+}

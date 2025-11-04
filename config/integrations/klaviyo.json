@@ -1,0 +1,18 @@
+{
+  "publicKey": "${KLAVIYO_PUBLIC_KEY}",
+  "privateKey": "${KLAVIYO_PRIVATE_KEY}",
+  "lists": {
+    "newsletter": "Cheeky Prints Newsletter",
+    "rewards": "Cheeky Club"
+  },
+  "events": {
+    "Viewed Product": "view_item",
+    "Added to Cart": "add_to_cart",
+    "Started Checkout": "begin_checkout",
+    "Placed Order": "purchase"
+  },
+  "rateLimit": {
+    "requestsPerSecond": 10,
+    "retryStrategy": "exponential"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "colors": {
+    "colorBackground": "#FFFFFF",
+    "colorSurface": "#FDF8F3",
+    "colorSurfaceAlt": "#FFF4D9",
+    "colorPrimary": "#FF4F7B",
+    "colorPrimaryOn": "#FFFFFF",
+    "colorPrimaryMuted": "#FFB2C6",
+    "colorSecondary": "#5125F2",
+    "colorSecondaryOn": "#FFFFFF",
+    "colorAccent": "#11CDEF",
+    "colorAccentOn": "#102A43",
+    "colorSuccess": "#1FBF75",
+    "colorSuccessOn": "#03281C",
+    "colorWarning": "#FFB400",
+    "colorWarningOn": "#2B1B02",
+    "colorDanger": "#D64550",
+    "colorDangerOn": "#FFFFFF",
+    "colorNeutral900": "#101828",
+    "colorNeutral700": "#344054",
+    "colorNeutral500": "#667085",
+    "colorNeutral300": "#D0D5DD",
+    "colorNeutral200": "#EAECF0",
+    "colorNeutral100": "#F2F4F7",
+    "colorNeutral50": "#F9FAFB",
+    "colorLink": "#5125F2",
+    "colorLinkHover": "#3C17C0",
+    "colorFocusRing": "#11CDEF",
+    "colorOverlay": "rgba(16, 24, 40, 0.56)",
+    "colorDisabledSurface": "#E4E7EC",
+    "colorDisabledOn": "#98A2B3"
+  },
+  "typography": {
+    "fontFamilyBase": "'Inter', 'Helvetica Neue', Arial, sans-serif",
+    "fontFamilyDisplay": "'Fraunces', 'Georgia', serif",
+    "fontWeightRegular": 400,
+    "fontWeightMedium": 500,
+    "fontWeightSemiBold": 600,
+    "fontWeightBold": 700,
+    "lineHeightTight": 1.2,
+    "lineHeightSnug": 1.35,
+    "lineHeightBase": 1.5,
+    "lineHeightRelaxed": 1.7,
+    "fontSizeScale": {
+      "sizeXs": "0.75rem",
+      "sizeSm": "0.875rem",
+      "sizeMd": "1rem",
+      "sizeLg": "1.125rem",
+      "sizeXl": "1.375rem",
+      "size2Xl": "1.75rem",
+      "size3Xl": "2.25rem",
+      "size4Xl": "3rem"
+    },
+    "letterSpacingTight": "-0.01em",
+    "letterSpacingNormal": "0em",
+    "letterSpacingWide": "0.04em"
+  },
+  "spacing": {
+    "spacingNone": "0px",
+    "spacing3xs": "2px",
+    "spacing2xs": "4px",
+    "spacingXs": "8px",
+    "spacingSm": "12px",
+    "spacingMd": "16px",
+    "spacingLg": "24px",
+    "spacingXl": "32px",
+    "spacing2Xl": "40px",
+    "spacing3Xl": "48px",
+    "spacing4Xl": "64px"
+  },
+  "radii": {
+    "radiusNone": "0px",
+    "radiusXs": "4px",
+    "radiusSm": "8px",
+    "radiusMd": "12px",
+    "radiusLg": "16px",
+    "radiusFull": "999px"
+  },
+  "elevations": {
+    "elevationFlat": "none",
+    "elevationRaised": "0 1px 2px rgba(16, 24, 40, 0.08)",
+    "elevationOverlay": "0 10px 30px rgba(16, 24, 40, 0.18)",
+    "elevationModal": "0 24px 48px rgba(16, 24, 40, 0.24)",
+    "elevationToast": "0 12px 24px rgba(16, 24, 40, 0.16)"
+  },
+  "shadows": {
+    "shadowFocus": "0 0 0 3px rgba(17, 205, 239, 0.35)",
+    "shadowInset": "inset 0 1px 2px rgba(16, 24, 40, 0.1)"
+  },
+  "motion": {
+    "durationInstant": "50ms",
+    "durationFast": "150ms",
+    "durationBase": "250ms",
+    "durationSlow": "400ms",
+    "easingStandard": "cubic-bezier(0.4, 0, 0.2, 1)",
+    "easingEntrance": "cubic-bezier(0.3, 0, 0.2, 1)",
+    "easingExit": "cubic-bezier(0.4, 0, 1, 1)",
+    "motionReduce": "respect prefers-reduced-motion"
+  }
+}

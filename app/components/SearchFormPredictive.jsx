@@ -1,6 +1,8 @@
 import {useFetcher, useNavigate} from 'react-router';
-import React, {useRef, useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import {useAside} from './Aside';
+
+/** @typedef {import('react')} React */
 
 export const SEARCH_ENDPOINT = '/search';
 

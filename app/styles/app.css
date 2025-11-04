@@ -17,6 +17,11 @@
   --color-primary-dark: #1d4031;
   --color-secondary: #ce8751;
   --color-accent: #f3c76a;
+  --color-midnight: #0c0f29;
+  --color-neon-magenta: #ff2cc3;
+  --color-electric-blue: #3bf7ff;
+  --color-hot-orange: #ffad00;
+  --color-ink-contrast: #f6f9ff;
   --shadow-soft: 0 26px 60px rgba(16, 39, 30, 0.12);
   --radius-large: 36px;
   --radius-medium: 22px;
@@ -81,6 +86,210 @@ img {
   flex-direction: column;
   gap: 6rem;
   padding-bottom: 6rem;
+}
+
+.immersive-hero {
+  background: var(--color-midnight);
+  color: var(--color-ink-contrast);
+  overflow: hidden;
+  position: relative;
+}
+
+.immersive-hero__background {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.immersive-hero__gradient {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 44, 195, 0.42), transparent 60%),
+    radial-gradient(circle at 80% 22%, rgba(59, 247, 255, 0.32), transparent 62%),
+    radial-gradient(circle at 52% 86%, rgba(255, 173, 0, 0.3), transparent 70%);
+  filter: blur(0px);
+  inset: -25% -10% -30% -10%;
+  opacity: 0.85;
+  position: absolute;
+  transform: translateZ(0);
+}
+
+.immersive-hero__three {
+  inset: -6% -12% -12% -12%;
+  position: absolute !important;
+  pointer-events: none;
+}
+
+.immersive-hero__three canvas {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.immersive-hero__inner {
+  align-items: center;
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  min-height: clamp(28rem, 75vh, 38rem);
+  padding: clamp(6rem, 14vw, 8.5rem) 0 clamp(4rem, 10vw, 6.5rem);
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 62em) {
+  .immersive-hero__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  }
+}
+
+.immersive-hero__copy {
+  display: grid;
+  gap: 1.8rem;
+  max-width: 560px;
+}
+
+.immersive-hero__copy h1 {
+  font-size: clamp(3rem, 6vw, 4.4rem);
+  line-height: 1.02;
+  margin: 0;
+}
+
+.immersive-hero__copy p {
+  color: rgba(246, 249, 255, 0.78);
+  font-size: 1.08rem;
+  margin: 0;
+}
+
+.immersive-hero .eyebrow {
+  color: var(--color-electric-blue);
+}
+
+.immersive-hero__stats {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin: 2rem 0 0;
+  padding: 0;
+}
+
+.immersive-hero__stat {
+  backdrop-filter: blur(12px);
+  background: rgba(8, 12, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-medium);
+  box-shadow: 0 28px 90px rgba(7, 11, 36, 0.55);
+  padding: 1.45rem;
+}
+
+.immersive-hero__stat dt {
+  color: rgba(246, 249, 255, 0.7);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin: 0 0 0.4rem;
+  text-transform: uppercase;
+}
+
+.immersive-hero__stat dd {
+  color: var(--color-ink-contrast);
+  font-size: 1.02rem;
+  margin: 0;
+}
+
+.immersive-hero__product-card {
+  align-self: stretch;
+  backdrop-filter: blur(18px);
+  background: linear-gradient(140deg, rgba(255, 44, 195, 0.22), rgba(59, 247, 255, 0.18));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-medium);
+  box-shadow: 0 32px 120px rgba(8, 12, 40, 0.55);
+  color: var(--color-ink-contrast);
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.8rem, 3vw, 2.4rem);
+  position: relative;
+  text-decoration: none;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.immersive-hero__product-card:hover {
+  border-color: rgba(255, 173, 0, 0.55);
+  box-shadow: 0 42px 130px rgba(8, 12, 40, 0.65);
+  transform: translateY(-6px);
+}
+
+.immersive-hero__product-card--placeholder {
+  background: rgba(8, 12, 40, 0.55);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.immersive-hero__product-card h3 {
+  font-size: 1.9rem;
+  margin: 0;
+}
+
+.immersive-hero__product-card p {
+  color: rgba(246, 249, 255, 0.76);
+  margin: 0;
+}
+
+.immersive-hero__product-link {
+  color: var(--color-electric-blue);
+  font-size: 0.96rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.immersive-feature-cards {
+  margin-top: clamp(3rem, 8vw, 5rem);
+  padding-bottom: clamp(2rem, 6vw, 3.5rem);
+  position: relative;
+  z-index: 1;
+}
+
+.immersive-feature-cards__inner {
+  backdrop-filter: blur(20px);
+  background: rgba(8, 12, 40, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-large);
+  box-shadow: 0 40px 140px rgba(5, 9, 32, 0.62);
+  padding: clamp(2.5rem, 6vw, 4rem);
+}
+
+.immersive-feature-cards__inner h2 {
+  color: var(--color-ink-contrast);
+  margin: 0 0 1.5rem;
+  max-width: 520px;
+}
+
+.immersive-feature-cards__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.immersive-feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-medium);
+  padding: 1.5rem;
+  transition: transform 200ms ease, border-color 200ms ease, background 200ms ease;
+}
+
+.immersive-feature-card:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 173, 0, 0.6);
+  transform: translateY(-4px);
+}
+
+.immersive-feature-card h3 {
+  color: var(--color-ink-contrast);
+  font-size: 1.1rem;
+  margin: 0 0 0.6rem;
+}
+
+.immersive-feature-card p {
+  color: rgba(246, 249, 255, 0.75);
+  margin: 0;
 }
 
 .button {

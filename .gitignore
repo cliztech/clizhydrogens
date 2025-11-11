@@ -1,10 +1,5 @@
 node_modules
-/.DS_Store
-/.cache
-/build
-/dist
-/public/build
-/.mf
+reports/*
+!reports/.keep
+memory/**/*.json
 .env
-.shopify
-.react-router

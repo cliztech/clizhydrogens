@@ -1,0 +1,111 @@
+name: CI (Hydrogen + QA Gates)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: |
+          npm ci || npm i
+          npm i -D toml @playwright/test @axe-core/playwright lighthouse wait-on
+
+      - name: Parse config.toml → env
+        id: cfg
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const toml = require('toml');
+          const cfg = toml.parse(fs.readFileSync('config.toml','utf8'));
+          const lh = (cfg?.['ci.assertions']?.lighthouse_min_scores) || {};
+          const qa = cfg?.qa || {};
+          const hydro = cfg?.hydrogen || {};
+          const a11yRules = (cfg?.['ci.assertions']?.a11y_ruleset) || 'wcag2.2';
+          function exp(k,v){ console.log(`${k}=${v ?? ''}`); }
+          exp('LH_PERF', lh.performance ?? 0.9);
+          exp('LH_A11Y', lh.accessibility ?? 0.9);
+          exp('LH_SEO',  lh.seo ?? 0.9);
+          exp('QA_REQUIRE_A11Y', qa.require_a11y ? '1':'0');
+          exp('QA_REQUIRE_SEC',  qa.require_security_scan ? '1':'0');
+          exp('HYDRO_JSONLD', hydro.require_jsonld ? '1':'0');
+          exp('HYDRO_CANONICAL', hydro.require_canonical ? '1':'0');
+          exp('A11Y_RULESET', a11yRules);
+          NODE | tee -a $GITHUB_ENV
+
+      - name: Write dynamic lighthouserc from config.toml
+        run: |
+          cat > lighthouserc.dynamic.json <<JSON
+          {
+            "ci": {
+              "collect": { "startServerCommand": "npm run dev", "numberOfRuns": 1, "url": ["http://localhost:3000/"] },
+              "assert": {
+                "assertions": {
+                  "categories:performance":   ["error", { "minScore": ${LH_PERF} }],
+                  "categories:accessibility": ["error", { "minScore": ${LH_A11Y} }],
+                  "categories:seo":           ["error", { "minScore": ${LH_SEO} }]
+                }
+              }
+            }
+          }
+          JSON
+
+      - name: Start dev server
+        run: |
+          npm run dev &> /tmp/dev.log &
+          npx -y wait-on http://localhost:3000
+
+      - name: Playwright install
+        run: npx playwright install --with-deps
+
+      - name: Playwright smoke tests
+        run: npx playwright test
+        env:
+          PWTRACE: retain-on-failure
+
+      - name: Accessibility (axe) — enforce if configured
+        if: env.QA_REQUIRE_A11Y == '1'
+        run: npx playwright test app/tests/a11y.spec.ts
+
+      - name: Lighthouse CI
+        run: npx lhci autorun --config=lighthouserc.dynamic.json
+
+      - name: Check Hydrogen SEO toggles
+        if: env.HYDRO_JSONLD == '1' || env.HYDRO_CANONICAL == '1'
+        run: |
+          curl -sS http://localhost:3000/ > /tmp/home.html
+          if [ "$HYDRO_JSONLD" = "1" ]; then
+            grep -q '"@context":"https://schema.org"' /tmp/home.html || (echo "JSON-LD missing" && exit 1)
+          fi
+          if [ "$HYDRO_CANONICAL" = "1" ]; then
+            grep -qi '<link rel="canonical"' /tmp/home.html || (echo "Canonical link missing" && exit 1)
+          fi
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: ignore
+
+      - name: Upload server log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-log
+          path: /tmp/dev.log
+          if-no-files-found: ignore

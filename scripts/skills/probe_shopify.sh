@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
-test -f skills/shopify.build/SKILL.md && echo "shopify.build OK"
+
+if [[ -f "skills/shopify.build/SKILL.md" ]]; then
+  echo "shopify.build OK"
+else
+  echo "shopify.build missing" >&2
+  exit 1
+fi

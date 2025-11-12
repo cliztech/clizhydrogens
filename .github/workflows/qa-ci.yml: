@@ -1,0 +1,79 @@
+name: QA & Compliance Checks
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    - cron: "0 9 * * MON"
+
+jobs:
+  qa-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Parse config.toml
+        id: parse
+        run: |
+          npm install -g @iarna/toml
+          node -e "
+          const fs=require('fs'), toml=require('@iarna/toml');
+          const c=toml.parse(fs.readFileSync('config.toml','utf8'));
+          console.log('::set-output name=lighthouse::'+JSON.stringify(c['ci.assertions'].lighthouse_min_scores));
+          console.log('::set-output name=a11y::'+c['ci.assertions'].a11y_ruleset);
+          "
+      
+      - name: Run Playwright tests
+        run: npx playwright test --trace on
+
+      - name: Run axe-core accessibility scan
+        run: npx axe https://localhost:3000 --ruleset ${{ steps.parse.outputs.a11y }}
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: "https://localhost:3000"
+          budgetPath: "./.lighthouse/budget.json"
+          temporaryPublicStorage: true
+
+      - name: Enforce Lighthouse thresholds
+        run: |
+          node -e "
+          const fs=require('fs');
+          const scores=${{ steps.parse.outputs.lighthouse }};
+          const report=JSON.parse(fs.readFileSync('./.lighthouseci/manifest.json','utf8'))[0];
+          const cats=report.summary;
+          for(const [k,v] of Object.entries(scores)){
+            if(cats[k]<v){
+              console.error(`Lighthouse score too low for ${k}: ${cats[k]} < ${v}`);
+              process.exit(1);
+            }
+          }"
+
+      - name: Verify Hydrogen SEO requirements
+        run: |
+          node -e "
+          const fs=require('fs');
+          const html=fs.readFileSync('build/index.html','utf8');
+          if(!html.includes('application/ld+json')) throw new Error('Missing JSON-LD schema');
+          if(!html.includes('rel=\"canonical\"')) throw new Error('Missing canonical URL');
+          "
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data "{\"text\":\"🚨 CI failure in Cheeky Prints QA pipeline\"}" \
+          ${{ secrets.INCIDENT_WEBHOOK }}

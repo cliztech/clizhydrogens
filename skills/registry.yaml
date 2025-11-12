@@ -1,0 +1,44 @@
+version: 1
+defaults:
+  retries: 1
+  timeout_sec: 120
+  mcp_required: []          # declare when a skill needs a server
+routing:
+  - intent: "shopify|hydrogen|storefront|ecommerce"
+    use: shopify.build
+    subagent: sub.shopify.scaffold
+  - intent: "a11y|accessibility|wcag|axe"
+    use: qa.a11y
+    subagent: sub.qa.a11y
+  - intent: "schema|json-ld|canonical|seo"
+    use: seo.jsonld
+    subagent: sub.seo.schema
+  - intent: "poster|hero image|neon|anime|promo"
+    use: image.neon-poster
+    subagent: sub.image.neon
+catalog:
+  shopify.build:
+    description: Scaffold Hydrogen + Tailwind + tests + CI
+    inputs: [store_domain, api_token]
+    outputs: [repo_scaffold, ci_pipeline]
+    mcp_required: []
+    acceptance:
+      - "dev server responds 200 on /"
+      - "playwright smoke passes"
+      - "lighthouse perf>=0.90 && a11y>=0.90 && seo>=0.90"
+  qa.a11y:
+    description: WCAG 2.2 AA with axe via Playwright
+    inputs: [base_url]
+    outputs: [axe_report]
+    mcp_required: ["playwright"]
+    acceptance: ["axe violations = 0 on home, collections, PDP, cart"]
+  seo.jsonld:
+    description: Product/Collection JSON-LD + canonical links
+    inputs: [routes]
+    outputs: [schema_snippets, canonical_links]
+    acceptance: ["JSON-LD present", "canonical present"]
+  image.neon-poster:
+    description: Neon-anime poster export
+    inputs: [palette, headline, cta]
+    outputs: [poster_png, prompt_txt]
+    acceptance: ["PNG 2048px min", "SR-safe contrast"]

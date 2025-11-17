@@ -1,0 +1,37 @@
+/* globals.css */
+@import './tokens.css';
+
+body {
+  background: var(--cp-bg);
+  color: var(--cp-foreground);
+  margin: 0;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff3acd, #ff7ae0);
+  border-radius: 9999px;
+  padding: 0.7rem 1.4rem;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: var(--cp-shadow-md);
+  transition: all 150ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: var(--cp-shadow-lg);
+}
+
+.btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.65rem 1.3rem;
+  border-radius: 9999px;
+  background: rgba(12, 8, 34, 0.8);
+  color: var(--cp-foreground-soft);
+  transition: all 150ms;
+}
+
+.btn-ghost:hover {
+  border-color: var(--cp-primary);
+  color: var(--cp-foreground);
+}

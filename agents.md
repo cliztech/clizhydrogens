@@ -48,8 +48,6 @@ Workflow
 ## 3. Orchestration Chain
 PM → Research → Brand → UI/UX + Artwork → Architect → Frontend → Backend → SEO → QA → DevOps → Perf → Security → Insights
 
-yaml
-Copy code
 All agents report in PR comments; PM confirms Definition of Done.
 
 ---
@@ -93,16 +91,13 @@ Results posted in PR description → logged to `/logs/agents.log`.
 ---
 
 ## 8. Key Docs
-docs/
-roadmap.md
-adr/
-design/
-insights-weekly.md
-security.md
-postmortems/
-
-yaml
-Copy code
+- `docs/`
+- `roadmap.md`
+- `adr/`
+- `design/`
+- `insights-weekly.md`
+- `security.md`
+- `postmortems/`
 
 ---
 
@@ -144,8 +139,12 @@ acceptance_criteria:
   - "Tests pass"
 done_when:
   - "CI green"
-13. Agent Routing Quick Ref
-Escalation	Trigger
-QA → PM	Blocking defects
-Security-Ops → PM	Critical vulnerability
-Perf-Analyst → PM	Perf budget breach
+```
+
+## 13. Agent Routing Quick Ref
+
+| Escalation | Trigger |
+|------------|---------|
+| QA → PM | Blocking defects |
+| Security-Ops → PM | Critical vulnerability |
+| Perf-Analyst → PM | Perf budget breach |

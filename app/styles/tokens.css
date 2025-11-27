@@ -1,0 +1,17 @@
+:root {
+  --cp-bg: #050313;
+  --cp-surface: #0C0822;
+  --cp-surface-soft: #20163D;
+  --cp-primary: #FF3ACD;
+  --cp-secondary: #2EE6FF;
+  --cp-accent: #FFC857;
+  --cp-foreground: #FDF5FF;
+  --cp-foreground-soft: #D7C6F5;
+  --cp-muted: #9483C4;
+  --cp-hero-glow: radial-gradient(
+      circle at 20% -20%,
+      #ff3acd,
+      transparent 55%
+    ),
+    radial-gradient(circle at 100% 30%, #2ee6ff, transparent 55%);
+}

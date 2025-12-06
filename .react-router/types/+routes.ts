@@ -137,7 +137,7 @@ type Pages = {
 };
 
 type RouteFiles = {
-  "root.jsx": {
+  "root.tsx": {
     id: "root";
     page: "/" | "/blogs/:blogHandle/:articleHandle" | "/api/:version/graphql.json" | "/sitemap/:type/:page.xml" | "/blogs/:blogHandle" | "/collections/:handle" | "/account/authorize" | "/collections" | "/policies/:handle" | "/products/:handle" | "/account/logout" | "/collections/all" | "/policies" | "/account/login" | "/discount/:code" | "/sitemap.xml" | "/pages/:handle" | "/robots.txt" | "/blogs" | "/account" | "/account/orders" | "/account/orders/:id" | "/account/addresses" | "/account/profile" | "/account/*" | "/search" | "/cart" | "/cart/:lines" | "/*" | "/graphiql" | "/subrequest-profiler" | "/.well-known/appspecific/com.chrome.devtools.json";
   };

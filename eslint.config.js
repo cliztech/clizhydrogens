@@ -40,6 +40,7 @@ export default [
       'plugin:react/recommended',
       'plugin:react-hooks/recommended',
       'plugin:jsx-a11y/recommended',
+      'plugin:import/recommended',
     ),
   ),
   {
@@ -48,6 +49,7 @@ export default [
       react: fixupPluginRules(react),
       'react-hooks': fixupPluginRules(reactHooks),
       'jsx-a11y': fixupPluginRules(jsxA11Y),
+      'import': fixupPluginRules(_import),
     },
     languageOptions: {
       globals: {
@@ -65,6 +67,12 @@ export default [
     settings: {
       react: {
         version: 'detect',
+      },
+      'import/internal-regex': '^~/',
+      'import/resolver': {
+        typescript: {
+          project: path.resolve(__dirname, 'jsconfig.json'),
+        },
       },
     },
     rules: {
@@ -104,6 +112,7 @@ export default [
     plugins: {
       react: fixupPluginRules(react),
       'jsx-a11y': fixupPluginRules(jsxA11Y),
+      'import': fixupPluginRules(_import),
     },
     settings: {
       react: {
@@ -120,8 +129,11 @@ export default [
           linkAttribute: 'to',
         },
       ],
+      'import/internal-regex': '^~/',
       'import/resolver': {
-        typescript: {},
+        typescript: {
+          project: path.resolve(__dirname, 'jsconfig.json'),
+        },
       },
     },
     rules: {

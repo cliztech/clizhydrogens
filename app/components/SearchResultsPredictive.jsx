@@ -1,6 +1,6 @@
 import {Link, useFetcher} from 'react-router';
 import {Image, Money} from '@shopify/hydrogen';
-import React, {useRef, useEffect} from 'react';
+import {useRef, useEffect} from 'react';
 import {
   getEmptyPredictiveSearchResult,
   urlWithTrackingParams,
@@ -10,7 +10,7 @@ import {useAside} from './Aside';
 /**
  * Component that renders predictive search results
  * @param {SearchResultsPredictiveProps}
- * @return {React.ReactNode}
+ * @return {import('react').ReactNode}
  */
 export function SearchResultsPredictive({children}) {
   const aside = useAside();
@@ -227,7 +227,7 @@ function SearchResultsPredictiveQueries({queries, queriesDatalistId}) {
 
 /**
  * @param {{
- *   term: React.MutableRefObject<string>;
+ *   term: import('react').MutableRefObject<string>;
  * }}
  */
 function SearchResultsPredictiveEmpty({term}) {
@@ -275,9 +275,9 @@ function usePredictiveSearch() {
 /** @typedef {PredictiveSearchReturn['result']['items']} PredictiveSearchItems */
 /**
  * @typedef {{
- *   term: React.MutableRefObject<string>;
+ *   term: import('react').MutableRefObject<string>;
  *   total: number;
- *   inputRef: React.MutableRefObject<HTMLInputElement | null>;
+ *   inputRef: import('react').MutableRefObject<HTMLInputElement | null>;
  *   items: PredictiveSearchItems;
  *   fetcher: Fetcher<PredictiveSearchReturn>;
  * }} UsePredictiveSearchReturn
@@ -299,7 +299,7 @@ function usePredictiveSearch() {
  */
 /**
  * @typedef {{
- *   children: (args: SearchResultsPredictiveArgs) => React.ReactNode;
+ *   children: (args: SearchResultsPredictiveArgs) => import('react').ReactNode;
  * }} SearchResultsPredictiveProps
  */
 
